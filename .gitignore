@@ -1,0 +1,63 @@
+# Written on Day 0, BEFORE any secret exists. That order is the whole point (Principle 9).
+
+# ── secrets ──────────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+.envrc
+*.pem
+*.key
+*.p12
+kubeconfig
+.kube/
+*.tfvars
+!*.tfvars.example
+secrets.dec.yaml
+
+# ── python ───────────────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+# ── tooling caches ───────────────────────────────────────────────────────────
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# ── ml artifacts: heavy, regenerable, and not what git is for ────────────────
+mlruns/
+mlartifacts/
+models/*.pkl
+models/*.joblib
+models/*.onnx
+models/*.gguf
+data/raw/
+data/interim/
+data/processed/
+!data/**/.gitkeep
+*.duckdb
+*.sqlite3
+*.db
+
+# ── infrastructure state: contains secrets, and is never the source of truth ──
+.terraform/
+*.tfstate
+*.tfstate.*
+.terragrunt-cache/
+
+# ── runtime and scratch ──────────────────────────────────────────────────────
+days/*/lab/
+logs/
+tmp/
+.DS_Store
+Thumbs.db
