@@ -11,7 +11,7 @@ parts: 19
 generated: "2026-08-24"
 status: complete
 lab_scaffolded: false
-commit: ""
+commit: "5a8edee"
 ---
 
 # Day 0 — Toolchain, skeleton and the `./o` driver
