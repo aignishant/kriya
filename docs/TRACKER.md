@@ -15,15 +15,15 @@ generator: scripts/tracker.py
 
 | | Count | Of total |
 |---|---|---|
-| 📄 Days written in the hub + parts/ shape | **0** | 0.0% |
-| 📚 Sub-topic documents in `parts/` | **0** | — |
-| ✅ Days completed (checklist fully ticked) | **0** | 0.0% |
-| ⬜ Never written | **237** | 100.0% |
+| 📄 Days written in the hub + parts/ shape | **1** | 0.4% |
+| 📚 Sub-topic documents in `parts/` | **19** | — |
+| ✅ Days completed (checklist fully ticked) | **1** | 0.4% |
+| ⬜ Never written | **236** | 99.6% |
 | Total days in plan | 237 | (Day 0 + Days 1–236) |
 
 ```
-written  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0/237
-complete ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0/237
+written  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  1/237
+complete ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  1/237
 ```
 
 **Legend:** ✅ done (checklist fully ticked) · 📄 written (hub + `parts/` + checklist) · ⚠️ no checklist · ⬜ pending
@@ -32,7 +32,7 @@ complete ░░░░░░░░░░░░░░░░░░░░░░░�
 
 | Phase | Theme | Days | Written | Parts | Done |
 |---|---|---|---|---|---|
-| 0 | Foundry | 0 | 0/1 | 0 | 0/1 |
+| 0 | Foundry | 0 | 1/1 | 19 | 1/1 |
 | 1 | The production mental model and the machine | 1–10 | 0/10 | 0 | 0/10 |
 | 2 | Change: version control, CI and releases | 11–20 | 0/10 | 0 | 0/10 |
 | 3 | Containers | 21–30 | 0/10 | 0 | 0/10 |
@@ -63,7 +63,7 @@ complete ░░░░░░░░░░░░░░░░░░░░░░░�
 
 | Day | Title | IDs | Status | Parts | Open boxes |
 |---|---|---|---|---|---|
-| 0 | Toolchain, skeleton and the `./o` driver — one owner for the environment, a repo that can… | — | ⬜ pending | — | — |
+| 0 | Toolchain, skeleton and the `./o` driver — one owner for the environment, a repo that can… | — | ✅ done | 19 | 0 |
 
 ### Phase 1 — The production mental model and the machine (Days 1–10)
 
@@ -420,7 +420,6 @@ complete ░░░░░░░░░░░░░░░░░░░░░░░�
 
 The next ten days to write, in order:
 
-- **Day 0** — Toolchain, skeleton and the `./o` driver — one owner for the environment, a repo that cannot leak a key, and a gate that refuses a half-finished day `(—)`
 - **Day 1** — What operations actually is — the day the code met real traffic, and the repo that remembers instead of the chat `(FND-01, FND-02)`
 - **Day 2** — The shape of a production system — the request path, the dependencies, the state, and the blast-radius map you draw before anything exists `(FND-03)`
 - **Day 3** — `pulse` v0 — the service you will operate for the next two hundred days `(FND-04)`
@@ -430,4 +429,5 @@ The next ten days to write, in order:
 - **Day 7** — Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system `(FND-08, FND-09)`
 - **Day 8** — HTTP and TLS in production — status codes that mean something, keep-alive, and the certificate that expires on a Sunday `(FND-10)`
 - **Day 9** — Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to start rather than failing late `(FND-11, FND-12, SEC-01)`
+- **Day 10** — Environments and promotion — what the word "production" actually promises `(FND-13)`
 

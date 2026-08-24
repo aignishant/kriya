@@ -23,9 +23,21 @@ build-backend = "hatchling.build"
 packages = ["pulse", "platform_ops"]
 
 [tool.uv]
+# On Day 0 there is no importable code yet - `pulse/` and `platform_ops/` hold a .gitkeep and
+# nothing else. Without this, every single `uv run` rebuilds and reinstalls an empty wheel, which
+# is wasted work and, under OneDrive, an occasional `Access is denied. (os error 5)` while removing
+# its own dist-info. `package = false` tells uv to install the dependencies and not the project.
+# Verified against docs.astral.sh/uv/concepts/projects/config/ on 2026-08-24.
+# FLIP THIS TO TRUE ON DAY 3, when `pulse/` gains real modules that tests need to import.
+package = false
+
 # uv installs by hardlinking from its cache into .venv, which is fast and costs no extra disk.
-# A cloud-synced folder (OneDrive, Dropbox, iCloud Drive) refuses hardlinks and the install dies
-# half-done with `os error 396`. This repository lives under OneDrive, so: copy.
+# Inside a cloud-synced folder that can hardlink, this is fine - measured working here 2026-08-24.
+# But OneDrive Files On-Demand turns files into placeholders, and hardlinking one of those fails
+# half-way through an install with `os error 396`, "the cloud operation cannot be performed on a
+# file with incompatible hardlinks" (astral-sh/uv#7906, #9721). Whether it fires depends on the
+# sync state of the moment, which is the worst kind of bug: intermittent and environmental.
+# Copying costs a few hundred milliseconds and removes the whole class. See Day 0, part 2.2.
 link-mode = "copy"
 
 [tool.ruff]

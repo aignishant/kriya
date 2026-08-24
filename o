@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Project Kriya daily driver. Replaces `make`, which is not installed on Windows.
-# Written on Day 0; every later day assumes it. See days/day-000-*/parts/03-the-o-driver/.
+# Written on Day 0; every later day assumes it. See days/day-000-*/parts/04-the-driver/.
 set -euo pipefail
 
 cd "$(dirname "$0")"

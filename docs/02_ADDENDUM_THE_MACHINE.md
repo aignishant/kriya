@@ -38,10 +38,18 @@ container-shaped behaves correctly there and strangely without it. The relevant 
 | Windows Home supports WSL2 and Docker Desktop | No edition upgrade is needed. |
 
 > ⚠️ **This repository lives under OneDrive.** Two consequences, both already handled:
-> `pyproject.toml` sets `link-mode = "copy"` because OneDrive refuses the hardlinks `uv` prefers and
-> the install otherwise dies half-done with `os error 396`; and `.gitignore` excludes `data/`,
-> `mlruns/` and model artifacts, because a synced folder full of regenerating binary artifacts is a
-> slow-motion disaster. **Do not remove either.**
+>
+> `pyproject.toml` sets `link-mode = "copy"`. By default `uv` hardlinks packages out of its cache
+> into `.venv`, and when OneDrive's Files On-Demand has turned a cached file into a cloud
+> placeholder, hardlinking it fails part-way through an install with `os error 396` — *"the cloud
+> operation cannot be performed on a file with incompatible hardlinks"* (reported upstream as
+> astral-sh/uv#7906 and #9721; a related path-traversal case is #19616). **Measured on this machine
+> on 2026-08-24, hardlinking worked** — the failure depends on the sync state of the moment, which
+> makes it intermittent and environmental rather than certain. `copy` costs a few hundred
+> milliseconds and removes the class. Day 0 part 2.2 is about exactly this judgement call.
+>
+> And `.gitignore` excludes `data/`, `mlruns/` and model artifacts, because a synced folder full of
+> regenerating binary artifacts is a slow-motion disaster. **Do not remove either.**
 
 ---
 
@@ -52,16 +60,40 @@ ask you to reason about them.
 
 | Number | How to find it | Where it binds |
 | --- | --- | --- |
-| Total RAM | `wmic computersystem get totalphysicalmemory` (or Task Manager) | Day 6, Day 42, Day 126 |
-| Free disk | `df -h` in Git Bash | Day 5, Day 30, Day 68 |
+| Total RAM | `(Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory` in PowerShell | Day 6, Day 42, Day 126 |
+| Free disk | `df -h .` in Git Bash | Day 5, Day 30, Day 68 |
 | Logical CPUs | `nproc` in Git Bash | Day 6, Day 44, Day 127 |
 | WSL2 memory ceiling | your `%UserProfile%\.wslconfig` | Day 21 onward |
 
-**The rule of thumb this plan uses:** leave 4 GB for Windows and your editor, and treat everything
-else as the cluster's budget. If your machine has 16 GB, that is roughly 12 GB to spend, and the
-profiles below fit inside it. If it has 8 GB, run one profile at a time and expect Day 126's local
-model to be the tightest day in the plan — which is itself worth experiencing, because "the model
-does not fit" is a real production conversation.
+> ⚠️ `wmic` is deprecated and absent on current Windows 11 builds — it returns nothing rather than
+> failing loudly, which is its own small lesson. Use the PowerShell form above.
+
+### 3.1 The reference machine
+
+Measured on **2026-08-24**, Day 0. Every resource claim in this plan is calibrated against these
+numbers, not against a hypothetical developer laptop:
+
+| | Observed |
+| --- | --- |
+| Total RAM | **11.7 GiB** (12 612 919 296 bytes) |
+| Logical CPUs | **4** |
+| Free disk | **44 GB** of 118 GB |
+| OS | Windows 11 Home Single Language |
+| GPU | none |
+
+**The rule of thumb this plan uses:** leave roughly **4 GB** for Windows, the browser and your
+editor, and treat what is left as the platform's budget. On the reference machine that is
+**about 7.5 GB** — not the 12 GB a 16 GB laptop would give you.
+
+**Four cores is the tighter constraint, and it is the one people miss.** Memory pressure announces
+itself (a container is `Killed`, exit 137, Day 30); CPU contention just makes everything slower and
+lies to you about which component is slow. A `kind` control plane, a Prometheus scraping every 15
+seconds and a model doing inference will contend for the same four cores, and the resulting latency
+graph will look exactly like a slow dependency. Day 50 and Day 110 both depend on you having felt
+this.
+
+If your machine differs, **re-measure and write your own numbers into `docs/PACKAGES.md`** — the
+profiles in §4 are stated in GB so you can do the arithmetic for your own hardware.
 
 ---
 
@@ -80,9 +112,26 @@ resource pressure except that your laptop is slow.
 | `llm` | Ollama + Qdrant | ~1 GB idle, much more while generating | Days 126–158 |
 | `agents` | MCP servers + agent runtime | ~400 MB | Days 179–214 |
 
-**Legal combinations on a 16 GB machine:** `core` + any two others. `core` + `cluster` + `obs` is
-the busiest combination the plan asks for regularly (Phases 7–8) and is deliberately close to the
-limit — Day 50 asks you to push it over.
+**Legal combinations on the reference machine (~7.5 GB of budget, 4 cores):**
+
+| Combination | Memory | Verdict |
+| --- | --- | --- |
+| `core` | ~0.7 GB | always on |
+| `core` + `cluster` | ~2.2 GB | comfortable (Phases 4–6) |
+| `core` + `obs` | ~2.2 GB | comfortable (Phases 7–8 before the cluster) |
+| `core` + `cluster` + `obs` | ~3.7 GB | **fits on memory, contends on CPU** — the busiest combination the plan asks for regularly, and deliberately close to the line. Day 50 asks you to push it over. |
+| `core` + `ml` | ~1.3 GB | comfortable (Phases 9–11) |
+| `core` + `llm` | ~1.7 GB idle, **much more generating** | the tight one. Stop everything else first. |
+| `core` + `cluster` + `obs` + `llm` | — | **do not.** This is the combination that swaps. |
+
+**Three rules that follow from four cores rather than from memory:**
+
+1. **Never benchmark with the observability stack starting up.** Prometheus' first scrapes and
+   Grafana's provisioning will eat a core, and the p99 you measure will be your own laptop.
+2. **Stop the cluster before Day 126's local model.** `kind` idles at real CPU cost, and inference
+   on four cores is slow enough already — which is the point of that day.
+3. **One profile per concern, started and stopped deliberately.** `docker compose --profile <name>
+   up -d` and `down`, every single day. This is a habit, not a suggestion.
 
 **When it does not fit** — and it will not, at least once — that is a capacity incident on your own
 infrastructure. Log it in `docs/INCIDENTS.md`. What you saw first, what it actually was, what you

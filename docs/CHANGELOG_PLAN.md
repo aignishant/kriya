@@ -41,3 +41,29 @@ Supporting decisions: ADR-0001 (charter), ADR-0002 (depth contract), ADR-0003 (z
 local-first), ADR-0004 (fundamentals before AI).
 
 ---
+
+## 2026-08-24 — Addendum 02 amended: the reference machine is 11.7 GB / 4 cores, not 16 GB
+
+**Trigger.** Day 0's first act is measuring the machine (Addendum 02 §3). The measurement came back
+**11.7 GiB of RAM and 4 logical CPUs**, against an addendum written assuming a 16 GB laptop and
+"roughly 12 GB to spend". Principle 14 says the plan is amended before the day is written, so it
+was — this row was appended before a line of Day 0 existed.
+
+**Amendment.**
+
+- Addendum 02 gains **§3.1, the reference machine**: the observed numbers, dated, with the working
+  budget restated as **~7.5 GB** rather than ~12 GB.
+- §4's "legal combinations on a 16 GB machine" is replaced by a table calibrated to that budget.
+  `core` + `cluster` + `obs` still fits on memory; `core` + `cluster` + `obs` + `llm` is now
+  explicitly listed as the combination that swaps.
+- **Four cores is named as the tighter constraint**, with three rules that follow from CPU
+  contention rather than memory: do not benchmark while the observability stack is starting, stop
+  the cluster before Day 126's local model, and start/stop one profile per concern every day.
+- §3's RAM command changed from `wmic computersystem get totalphysicalmemory` to the PowerShell
+  `Get-CimInstance` form. `wmic` is deprecated and absent on current Windows 11 builds, where it
+  returns nothing instead of failing — a silent wrong answer, which is worse than an error.
+
+**Not changed.** No day, no phase, no ID, no gate, no profile *content*. This is a calibration of
+the resource envelope, not a change to the curriculum.
+
+---
