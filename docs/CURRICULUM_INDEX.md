@@ -11,15 +11,15 @@ remember. Every ID appears exactly once; a duplicate or a missing ID is a plan b
 
 | ID | Day | Day title |
 | --- | --- | --- |
-| `FND-01` | [1](../days/day-001/LESSON.md) | What operations actually is — the day the code met real traffic, and the repo that reme… |
-| `FND-02` | [1](../days/day-001/LESSON.md) | What operations actually is — the day the code met real traffic, and the repo that reme… |
-| `FND-03` | [2](../days/day-002/LESSON.md) | The shape of a production system — the request path, the dependencies, the state, and t… |
-| `FND-04` | [3](../days/day-003/LESSON.md) | `pulse` v0 — the service you will operate for the next two hundred days |
-| `FND-05` | [4](../days/day-004/LESSON.md) | Linux for operators I — processes, signals, exit codes, and what "the service died" rea… |
-| `FND-06` | [5](../days/day-005/LESSON.md) | Linux for operators II — the filesystem, permissions, the disk that fills, the log that… |
-| `FND-07` | [6](../days/day-006/LESSON.md) | Resources — CPU, memory, the OOM killer, and why your process was simply `Killed` |
-| `FND-08` | [7](../days/day-007/LESSON.md) | Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system |
-| `FND-09` | [7](../days/day-007/LESSON.md) | Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system |
+| `FND-01` | [1](../days/day-001-what-operations-actually-is/LESSON.md) | What operations actually is — the day the code met real traffic, and the repo that reme… |
+| `FND-02` | [1](../days/day-001-what-operations-actually-is/LESSON.md) | What operations actually is — the day the code met real traffic, and the repo that reme… |
+| `FND-03` | [2](../days/day-002-shape-of-production-system/LESSON.md) | The shape of a production system — the request path, the dependencies, the state, and t… |
+| `FND-04` | [3](../days/day-003-pulse-v0/LESSON.md) | `pulse` v0 — the service you will operate for the next two hundred days |
+| `FND-05` | [4](../days/day-004-linux-for-operators-i/LESSON.md) | Linux for operators I — processes, signals, exit codes, and what "the service died" rea… |
+| `FND-06` | [5](../days/day-005-linux-for-operators-ii/LESSON.md) | Linux for operators II — the filesystem, permissions, the disk that fills, the log that… |
+| `FND-07` | [6](../days/day-006-resources-and-the-oom-killer/LESSON.md) | Resources — CPU, memory, the OOM killer, and why your process was simply `Killed` |
+| `FND-08` | [7](../days/day-007-networking-for-operators/LESSON.md) | Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system |
+| `FND-09` | [7](../days/day-007-networking-for-operators/LESSON.md) | Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system |
 | `FND-10` | [8](../days/day-008/LESSON.md) | HTTP and TLS in production — status codes that mean something, keep-alive, and the cert… |
 | `FND-11` | [9](../days/day-009/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
 | `FND-12` | [9](../days/day-009/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
