@@ -196,6 +196,24 @@ healthy one does.
       signals that stayed green and why each was blind rather than broken · what setting a timeout actually
       bought you*
 
+### 📄 The paper — `papers/congestion-avoidance-and-control.md`
+
+- [ ] **paper** read · the 1988 collapse understood as **32 Kbps to 40 bps between two buildings four
+      hundred yards apart**, caused by senders being impatient rather than by anything breaking
+- [ ] **paper** the citation opened at `https://ee.lbl.gov/papers/congavoid.pdf` — **not taken on trust
+      from this repository**
+- [ ] **paper** `lab/congestion-avoidance-and-control/collapse.py` typed and both runs done · **250
+      transmissions versus 172 for the identical 96 packets of useful work** confirmed
+- [ ] **paper** the queue reading understood: **peak 40, pegged at the limit** is the collapse, and it is
+      why the impatient timer also finished *later*
+- [ ] **paper** the failure run done with `CAPACITY = 8` and `DAMAGE = 0.30`, and **`finished 10/12`**
+      seen — backoff losing to a fixed timer when loss does **not** mean congestion
+- [ ] **paper** the demo knobs put back (`CAPACITY = 2`, `DAMAGE = 0.0`) before moving on
+- [ ] **paper** **what it did not claim** stated in your own words: *the word jitter appears nowhere in
+      it*, the proof is explicitly out of scope, and it is about one connection's retransmit timer
+- [ ] **paper** answered out loud: *why exponential and not linear · why exponential alone is not enough
+      for thirty clients that failed at the same instant*
+
 ---
 
 ## Both red gates

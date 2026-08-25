@@ -33,8 +33,8 @@ For each one, either say **"clear"** or quote the exact passage that fails it. N
 | 6 | **A capability without a bound** | Does every part that introduces a write path, an autoscaler, a remediation, a tool or an agent action name its blast radius: worst case, who can trigger it, what bounds it? (§17.4.1 rule 3) |
 | 7 | **Trimming to fit** | Is there a place where the explanation obviously stops early — a "we won't go into that here" with no forward link, a mechanism section shorter than its story? |
 | 8 | **Solved reps** | Is every `TODO(me)` still unsolved? Did the document quietly do the learner's exercise for them? |
-| 9 | **A citation instead of an explanation** | Is any paper named in passing rather than taught in a paper part (§17.4.2)? Conversely: does a part declare `papers: []` for a mechanism that plainly came from a published result? |
-| 10 | **The claim the paper never made** | Does every paper part's *What it did not claim* name a real over-reading, with what the paper actually bounded its result to — or is it a hedge ("results may vary")? |
+| 9 | **A citation instead of an explanation** | Is any paper named in passing rather than taught in a `papers/` document (§17.4.2)? `papers: []` is **not** a finding — papers are written on request, not generated. |
+| 10 | **The claim the paper never made** | *(Only if the day has a `papers/` folder.)* Does every paper document's *What it did not claim* name a real over-reading, with what the paper actually bounded its result to — or is it a hedge ("results may vary")? |
 
 ## Step 3 — the three tests, per part
 
@@ -46,10 +46,11 @@ For each one, either say **"clear"** or quote the exact passage that fails it. N
   worry about". Each one must link forward to a specific part. A deferred explanation must have an
   address.
 
-## Step 3b — the paper parts (§17.4.2)
+## Step 3b — the `papers/` documents (§17.4.2)
 
-Skip this only if every part in the day declares `papers: []` — and if it does, ask once whether that
-is honest for this subject.
+**Skip this entirely unless the day has a `papers/` folder.** Papers are written deliberately and on
+request, never generated (§17.4.2), so `papers: []` everywhere is the expected state of a generated
+day and is not a finding.
 
 - **The citation.** Title verbatim, year, venue or arXiv ID, a link that is free to read, and the
   date it was read. **Open the link.** A citation nobody opened is the easiest defect in this
@@ -74,8 +75,8 @@ is honest for this subject.
 - **Every new signal**: does the part say how you would alert on it, or explicitly that you would
   not and why?
 - **Every cost**: stated in quota units — requests, tokens, RAM, disk, CI minutes?
-- **Every citation**: opened, dated, cited by title? Does the hub's §8 name every paper the day
-  teaches?
+- **Every citation** *(only if the day has a `papers/` folder)*: opened, dated, cited by title? Does
+  the hub's §8 name every paper the day teaches?
 - **The machine**: does the hub's §3 say which profile to start **and what to stop first**
   (Addendum 02 §4)? Does the day's resident memory fit alongside what earlier days left running?
 
@@ -98,7 +99,7 @@ Print exactly this shape:
 day NNN — <title>
 depth check:   PASS / FAIL
 parts:         N across M sections, levels: <foundation×a, working×b, production×c>
-papers:        <slug (day it was taught), ...>  or  none declared
+papers:        <slug (day it was taught), ...>  or  none (the normal case)
 
 BLOCKING (must fix before this day counts as written)
   - <file>: <what, with the quoted passage>

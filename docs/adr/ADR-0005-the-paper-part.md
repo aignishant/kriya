@@ -48,8 +48,10 @@ fabricated paper is the same failure with better camouflage.
 
 **We adopt Option D**, as master plan §17.4.2.
 
-1. A paper is taught in a **part document of its own**, written to the same ten-section contract as
-   every other part, placed **last in the section folder whose mechanism it grounds**.
+1. A paper is taught in a **document of its own**, written to the same ten-section contract as every
+   other part, in the day's **`papers/` folder** — a sibling of `parts/`, named for the paper's slug.
+   It is not a subtopic of the day; it is the source the day rests on, and later days link the same
+   file rather than renumbering it into their own reading order.
 2. That part carries `kind: paper` and `paper: <slug>`, plus three extra sections in fixed
    positions: **The citation** after the one-line answer, **The demo** after *The mechanism*, and
    **What it did not claim** after the walkthrough.
@@ -62,10 +64,27 @@ fabricated paper is the same failure with better camouflage.
 5. A paper is explained **once in the curriculum**. Later days declare the slug and link the part.
 6. Citations name **title, year and identifier — never an author** (§18.4), and never from memory:
    a citation you have not opened is an invented fact (§17.4.1 rule 6).
-7. `scripts/depth_check.py` enforces the mechanical half: the missing key, the undeclared paper part,
+7. `scripts/depth_check.py` enforces the mechanical half: the missing key, the unresolved slug,
    the missing citation or identifier or read-date, the missing demo, the missing *What it did not
    claim*, those three sections out of order, `et al.`, and a hub that teaches a paper without
    naming it in §8.
+
+## Amended 2026-08-26 — written on request, never generated
+
+The decision above stands, with one clause added after the first paper document was reviewed: **a
+paper document is written deliberately, on request, and the day generator never produces one.** Every
+part of a generated day declares `papers: []`.
+
+The reason is the fourth hazard in the Context, taken seriously. A generator told to ask *"where did
+this come from?"* on every mechanism of every day, across 237 days, will eventually answer with a
+paper that does not exist — and a fabricated citation is both more convincing and harder to catch
+than a fabricated flag. Removing the instruction to go looking removes the only path by which one
+could be invented, at the cost of research entering the curriculum more slowly, by hand. That is the
+right trade for a curriculum whose first principle is that it does not make things up.
+
+Nothing about *how* a paper is written changes; §17.4.2 remains the standard it is held to.
+`scripts/depth_check.py` needed no change, because it only ever enforced the paper contract where a
+paper exists.
 
 ## Consequences
 
@@ -74,7 +93,7 @@ it that never left the lab. `grep -r "papers:" days/` is the curriculum's biblio
 the same act that writes the day. A fabricated citation is now a contract violation with a name,
 rather than a sentence nobody checks.
 
-**Harder.** Days that rest on research take longer to write, because a paper part is a full part —
+**Harder.** Days that rest on research take longer to write, because a paper document is a full part —
 story, mechanism, numbers, failure, production face. Two of them on one day is two extra documents,
 and §17.7's "no target part count" means that is simply what the day costs.
 
@@ -83,13 +102,13 @@ what it did not claim. Retrofitting the eleven days already written rather than 
 
 ## What would make us change our minds
 
-- If a day arrives where the honest answer is more than roughly four paper parts, the day is a
+- If a day arrives where the honest answer is more than roughly four papers, the day is a
   literature review and its **subject** is wrong, not this rule — the day map needs amending.
 - If `papers: []` is being written without the question being asked — visible as a day whose subject
   is plainly a published result and whose parts all declare `[]` — the declaration has become
   ceremony, and the check needs to move to the day level rather than be relaxed.
-- If a paper part regularly has nothing to put under *When it breaks*, the section list for a paper
-  part is mis-specified and should be adjusted rather than filled with padding.
+- If a paper document regularly has nothing to put under *When it breaks*, the section list for a
+  paper is mis-specified and should be adjusted rather than filled with padding.
 - If a paper's demo cannot be made to run in one folder with the standard library — a result that
   needs a cluster, a GPU or a proprietary dataset to show anything at all — the demo rule needs a
   named exemption for that class of paper, written down here, rather than a demo that fakes output.

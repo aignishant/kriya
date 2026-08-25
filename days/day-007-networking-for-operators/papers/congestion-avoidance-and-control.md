@@ -1,23 +1,22 @@
 ---
 day: 7
-part: "5.4"
 title: "Congestion Avoidance and Control"
 ids: [FND-09]
 level: production
 kind: paper
 paper: congestion-avoidance-and-control
 papers: [congestion-avoidance-and-control]
-prerequisites: ["5.2-retries-that-turn-a-blip-into-an-outage.md"]
-prev: "5.3-hanging-pulse-on-purpose.md"
-next: "../../LESSON.md"
+prerequisites: ["../parts/05-the-two-together/5.2-retries-that-turn-a-blip-into-an-outage.md"]
+prev: "../parts/05-the-two-together/5.3-hanging-pulse-on-purpose.md"
+next: "../LESSON.md"
 ---
 
-# 5.4 — Congestion Avoidance and Control
+# 📄 Congestion Avoidance and Control
 
 ## One-line answer
 
 The doubling wait you put in your retry ladder in
-[5.2](5.2-retries-that-turn-a-blip-into-an-outage.md) is not a convention somebody picked because it
+[5.2](../parts/05-the-two-together/5.2-retries-that-turn-a-blip-into-an-outage.md) is not a convention somebody picked because it
 looked tidy — it comes from a 1988 paper that watched a link between two buildings four hundred yards
 apart collapse from 32 Kbps to 40 bps, and argued that for senders who cannot see each other,
 **exponential is the only backoff shape with any hope of working**.
@@ -40,8 +39,8 @@ revised version of a paper originally presented at SIGCOMM '88."*
 
 > **Why no names appear here.** This curriculum cites by title, year and venue and never by author
 > (plan §18.4). It is not squeamishness: a citation is a *fact*, and the checkable facts about a
-> paper are its title, where it appeared, when, and what it says. `./o depth` rejects "et al." for
-> the same reason it rejects an invented flag.
+> paper are its title, where it appeared, when, and what it says. `./o depth` rejects an author-list
+> citation for the same reason it rejects an invented flag.
 
 ---
 
@@ -127,7 +126,7 @@ exponentially too. A brake that grows linearly loses the race.
 
 You already built this, one part ago, without being told where it came from.
 
-[5.2](5.2-retries-that-turn-a-blip-into-an-outage.md) had you write a client that waits 1 s, then
+[5.2](../parts/05-the-two-together/5.2-retries-that-turn-a-blip-into-an-outage.md) had you write a client that waits 1 s, then
 2 s, then 4 s. That is *exponential retransmit timer backoff*, which is item **(ii)** on this
 paper's list of seven algorithms — put into Berkeley Unix's TCP in 1988 and, from there, into
 everything.
@@ -143,7 +142,7 @@ It comes back, by name, on these days:
 - **Day 73 onward**, when you have to decide what to *page* a human about. "Retries are happening" is
   not a page. "Retries are not decaying" is.
 
-And it is the intellectual ancestor of the thing [5.1](5.1-the-timeout-budget-down-the-request-path.md)
+And it is the intellectual ancestor of the thing [5.1](../parts/05-the-two-together/5.1-the-timeout-budget-down-the-request-path.md)
 insisted on: a retry that is not bounded is not a retry, it is a load generator.
 
 ---
@@ -258,7 +257,7 @@ cd days/day-007-networking-for-operators/lab/congestion-avoidance-and-control
 Now the whole demo, in one file — the standard library only, nothing installed, no network:
 
 ```python
-"""Congestion collapse in one file - the paper's algorithm (ii), and nothing else.
+"""Congestion collapse in one file — the paper's algorithm (ii), and nothing else.
 
 Twelve senders share one bottleneck. Each has a small file to push and keeps exactly one packet
 in flight: send, wait for the ack, send the next. The bottleneck is a queue that drains
@@ -267,7 +266,7 @@ waits longer.
 
 That is the whole trap. A sender cannot see the queue. All it sees is an ack that has not come
 back yet, and it cannot tell "lost" from "still waiting". If its retransmit timer fires while the
-packet is merely queued, it sends the packet again - the duplicate joins the same queue, makes it
+packet is merely queued, it sends the packet again — the duplicate joins the same queue, makes it
 longer, makes every ack later, and fires more timers. The bottleneck ends up spending its capacity
 carrying copies of packets it has already delivered.
 
@@ -281,6 +280,7 @@ Usage:  python collapse.py fixed | exponential
 
 from __future__ import annotations
 
+import random
 import sys
 from dataclasses import dataclass, field
 
@@ -292,6 +292,7 @@ ACK_TICKS = 2  # time for an ack to get back once a packet has been delivered
 RTO = 6  # base retransmit timeout, in ticks
 BACKOFF_CAP = 64  # ceiling on the doubling, in ticks
 TICKS = 140  # how long we watch
+DAMAGE = 0.0  # chance a transmitted packet is corrupted rather than queued (a radio link)
 
 
 @dataclass
@@ -309,12 +310,14 @@ class Stats:
     useful: int = 0  # departures the receiver had not already seen
     duplicate: int = 0  # departures of a packet already delivered - wasted capacity
     dropped: int = 0  # arrivals refused because the queue was full
+    damaged: int = 0  # lost to corruption, not to a full queue
     finished: int = 0
     queue_peak: int = 0
     per_window: list[int] = field(default_factory=list)
 
 
 def run(mode: str) -> Stats:
+    rng = random.Random(7)
     senders = [Sender(ident=i) for i in range(SENDERS)]
     queue: list[tuple[int, int]] = []  # (sender ident, seq) waiting at the bottleneck
     acks: list[tuple[int, int, int]] = []  # (arrival tick, sender ident, seq)
@@ -340,7 +343,9 @@ def run(mode: str) -> Stats:
             if sender.done or sender.timer > tick:
                 continue
             stats.sent += 1
-            if len(queue) < QUEUE_MAX:
+            if DAMAGE and rng.random() < DAMAGE:
+                stats.damaged += 1  # corrupted in flight: nothing to do with congestion
+            elif len(queue) < QUEUE_MAX:
                 queue.append((sender.ident, sender.seq))
             else:
                 stats.dropped += 1
@@ -385,7 +390,9 @@ def main() -> int:
     print(
         f"[{tag}] link carried  {departures:>5}  useful {s.useful:>4}  duplicates {s.duplicate:>4}"
     )
-    print(f"[{tag}] goodput {goodput:6.1%}   files finished {s.finished}/{SENDERS}")
+    print(
+        f"[{tag}] goodput {goodput:6.1%}   damaged {s.damaged:>4}   finished {s.finished}/{SENDERS}"
+    )
     for i, useful in enumerate(s.per_window):
         print(f"[{tag}] t={i * 20:>3}-{i * 20 + 19:<3} useful {useful:>3}  {'#' * useful}")
     return 0
@@ -438,7 +445,7 @@ Observed on **2026-08-25**:
 [      fixed] 12 senders x 8 packets, link drains 2/tick
 [      fixed] transmissions   250  tail-drops    8  peak queue 40
 [      fixed] link carried    242  useful   96  duplicates  146
-[      fixed] goodput  39.7%   files finished 12/12
+[      fixed] goodput  39.7%   damaged    0   finished 12/12
 [      fixed] t=  0-19  useful  34  ##################################
 [      fixed] t= 20-39  useful  20  ####################
 [      fixed] t= 40-59  useful  12  ############
@@ -464,7 +471,7 @@ Observed on **2026-08-25**:
 [exponential] 12 senders x 8 packets, link drains 2/tick
 [exponential] transmissions   172  tail-drops    0  peak queue 28
 [exponential] link carried    172  useful   96  duplicates   76
-[exponential] goodput  55.8%   files finished 12/12
+[exponential] goodput  55.8%   damaged    0   finished 12/12
 [exponential] t=  0-19  useful  34  ##################################
 [exponential] t= 20-39  useful  20  ####################
 [exponential] t= 40-59  useful  20  ####################
@@ -506,7 +513,7 @@ This is the section that matters, because most of what this paper is quoted for 
 backoff spaces out **one sender's** retries; it does nothing whatsoever to stop a *crowd* of
 independent clients, all of whom failed at the same instant, from retrying in lockstep at 1 s, then
 all at 2 s, then all at 4 s. That is exactly what
-[5.2](5.2-retries-that-turn-a-blip-into-an-outage.md)'s third run measured, and randomisation is a
+[5.2](../parts/05-the-two-together/5.2-retries-that-turn-a-blip-into-an-outage.md)'s third run measured, and randomisation is a
 **later** idea from a different lineage. If you take one thing from this section: *backoff without
 jitter is a synchronised herd with better manners.*
 
@@ -543,48 +550,62 @@ attribute to "TCP congestion control", and its own comparison reports effective 
 
 ## When it breaks
 
-**The failure the demo can show you: backoff with no ceiling.** Take `BACKOFF_CAP` out of the
-picture by raising it far above the run:
+**The failure the demo can show you is the paper's own assumption.** The whole argument rests on one
+sentence quoted above: *"loss due to damage is rare (1%) so it is probable that a packet loss is due
+to congestion in the network."* Take that away — a radio link where packets are corrupted in flight
+whether or not anything is busy — and the algorithm reasons from a false premise.
+
+The demo has a knob for it. Turn the bottleneck up so the link is genuinely **not** congested, and
+turn on corruption:
 
 ```bash
-sed -i 's/^BACKOFF_CAP = 64/BACKOFF_CAP = 4096/' collapse.py
+sed -i 's/^CAPACITY = 2/CAPACITY = 8/; s/^DAMAGE = 0.0/DAMAGE = 0.30/' collapse.py
+python collapse.py fixed
 python collapse.py exponential
 ```
 
-**Line by line:** `sed -i` edits the file in place; `BACKOFF_CAP = 4096` is larger than the whole
-run, so `min(RTO * 2**retries, BACKOFF_CAP)` never clamps and the wait doubles without limit — 6,
-12, 24, 48, 96, 192 ticks and onward.
+**Line by line:**
+
+- `CAPACITY = 8` against twelve stop-and-wait senders means the queue never builds — watch `peak
+  queue` and `duplicates` in the output and you will see there is **no congestion at all** here.
+- `DAMAGE = 0.30` — three transmissions in ten are corrupted on the wire and never reach the queue.
+  This is a lift, a tunnel, a bad wifi channel: loss that carries **no information about load**.
+- Both timers are run against the identical seeded sequence of corruptions, so the comparison is
+  fair — `random.Random(7)` is fixed, so your numbers will match these.
 
 Observed on **2026-08-25**:
 
 ```text
-[exponential] 12 senders x 8 packets, link drains 2/tick
-[exponential] transmissions   131  tail-drops    0  peak queue 21
-[exponential] link carried    131  useful   88  duplicates   43
-[exponential] goodput  67.2%   files finished 10/12
-[exponential] t=  0-19  useful  34  ##################################
-[exponential] t= 20-39  useful  20  ####################
-[exponential] t= 40-59  useful  20  ####################
-[exponential] t= 60-79  useful  12  ############
-[exponential] t= 80-99  useful   2  ##
-[exponential] t=100-119 useful   0
-[exponential] t=120-139 useful   0
+[      fixed] 12 senders x 8 packets, link drains 8/tick
+[      fixed] transmissions   151  tail-drops    0  peak queue 7
+[      fixed] link carried     96  useful   96  duplicates    0
+[      fixed] goodput 100.0%   damaged   55   finished 12/12
+
+[exponential] 12 senders x 8 packets, link drains 8/tick
+[exponential] transmissions   140  tail-drops    0  peak queue 7
+[exponential] link carried     89  useful   89  duplicates    0
+[exponential] goodput 100.0%   damaged   51   finished 10/12
 ```
 
-**What it actually means.** Goodput went *up* — 67.2%, the best of the three runs — and the run is a
-failure. `files finished 10/12`: two senders backed off so far that they were still politely waiting
-when the run ended, having delivered 88 of the 96 packets between them. **The metric improved
-because the customers left.** A capped ladder is not a detail; without it, "exponential backoff" is
-a slow-motion outage in which your dashboards look excellent.
+**What it actually means.** `duplicates 0` and `peak queue 7` say it plainly: nothing was congested,
+so there was nothing for backing off to fix. The fixed timer delivered all 96 packets and finished
+every one of the twelve transfers. **The paper's algorithm finished ten of twelve** — two senders hit
+a run of corrupted packets, read it as a network in trouble, and doubled their way out to a wait long
+enough that they were still politely holding when the run ended. It is the same behaviour that was
+correct in the first experiment, applied to a signal that meant something else.
 
-Put it back before you continue:
+This is not a flaw the paper hid; it is the assumption it *states*. But it is why "just add
+exponential backoff" is not a universal answer, and it is the entire reason a generation of later
+work exists on distinguishing *loss* from *congestion*.
+
+Put the demo back before you continue:
 
 ```bash
-sed -i 's/^BACKOFF_CAP = 4096/BACKOFF_CAP = 64/' collapse.py
+sed -i 's/^CAPACITY = 8/CAPACITY = 2/; s/^DAMAGE = 0.30/DAMAGE = 0.0/' collapse.py
 ```
 
-**Line by line:** the same edit in reverse. The demo's numbers in the tables above assume the cap is
-64, so leaving it at 4096 makes everything you compare afterwards meaningless.
+**Line by line:** the same edit in reverse. Every number in the tables above assumes `CAPACITY = 2`
+and `DAMAGE = 0.0`; leaving the knobs turned makes everything you compare afterwards meaningless.
 
 **The three places the paper's result does not hold in a modern system:**
 
@@ -592,7 +613,7 @@ sed -i 's/^BACKOFF_CAP = 4096/BACKOFF_CAP = 64/' collapse.py
 | --- | --- | --- |
 | **Lossy links** (mobile, satellite, poor wifi) | The paper assumes loss ≈ congestion. When a packet was corrupted rather than queued, backing off cedes capacity that was never contended. | This is why the assumption is worth knowing: you cannot fix it from the sender, and modern stacks use extra signals to distinguish the two. Awareness-level here 🅿️. |
 | **Very large buffers** ("bufferbloat") | The paper's congestion signal is a *dropped packet*. If a device in the path has an enormous buffer, packets are not dropped, they are just delayed — enormously — so the signal never arrives and the sender never backs off. | Newer congestion control uses delay and bandwidth estimation rather than loss alone. Named, not built, on this day 🅿️. |
-| **An application retry against an error that is not congestion** | `400`, `401`, `404`, `422` will not become successes no matter how patiently you wait. | [5.2](5.2-retries-that-turn-a-blip-into-an-outage.md)'s rule: retry only what can plausibly succeed on a second attempt. |
+| **An application retry against an error that is not congestion** | `400`, `401`, `404`, `422` will not become successes no matter how patiently you wait. | [5.2](../parts/05-the-two-together/5.2-retries-that-turn-a-blip-into-an-outage.md)'s rule: retry only what can plausibly succeed on a second attempt. |
 
 ---
 
@@ -613,7 +634,7 @@ used the paper's numbers. They will check three things:
 1. **Is it capped?** An uncapped ladder is the failure above.
 2. **Does it reset on success?** A ladder that only ever grows is a slow shutdown.
 3. **Is it bounded in total?** Backoff limits the *rate* of retries; only a maximum attempt count or
-   a deadline limits the *number*. [5.1](5.1-the-timeout-budget-down-the-request-path.md) is where
+   a deadline limits the *number*. [5.1](../parts/05-the-two-together/5.1-the-timeout-budget-down-the-request-path.md) is where
    that bound comes from.
 
 **The blast radius of the thing this paper gives you.** A retry ladder is a *capability*: it lets one

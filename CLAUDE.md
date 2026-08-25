@@ -70,9 +70,10 @@ days/day-NNN-<day-slug>/
 │   ├── 01-<slug>/
 │   │   ├── 1.1-<slug>.md
 │   │   ├── 1.2-<slug>.md
-│   │   └── 1.3-<paper-slug>.md   # a paper part, last in its section (§17.4.2)
 │   └── 02-<slug>/
 │       └── 2.1-<slug>.md
+├── papers/        # one document per paper the day rests on (§17.4.2)
+│   └── <paper-slug>.md
 └── lab/           # the learner's own code
 ```
 
@@ -93,11 +94,14 @@ days/day-NNN-<day-slug>/
 - **Every part carries all ten required sections in order**: frontmatter · one-line answer ·
   **the story** · the idea in plain language · **why Kriya needs it** · the mechanism · line by
   line · when it breaks · **in production** · check yourself. See plan §17.4.
-- **Every part declares `papers:`** — the slugs of the papers its idea rests on, or `[]`. `[]` is the
-  common case and a real answer, exactly like `0` in a cost budget. **Never invent a citation.**
-- **A paper is taught in a part of its own** (§17.4.2), never as a footnote or a reading list:
-  `kind: paper`, `paper: <slug>`, placed last in the section whose mechanism it grounds, carrying the
-  ordinary ten sections plus three — **the citation** (title, year, venue or arXiv ID, a free link,
+- **Every part declares `papers:`** — the slugs of the papers its idea rests on, or `[]`. **A day you
+  generate declares `[]` everywhere**: papers are written deliberately and on request, never by the
+  day generator (§17.4.2), because a citation is the easiest fact here to fabricate. **Never invent a
+  citation, and never go looking for one to fill the field.**
+- **When a paper *is* written** — on request, never automatically — it is a document of its own
+  (§17.4.2), never a footnote or a reading list:
+  `days/day-NNN-<slug>/papers/<paper-slug>.md` — a **sibling of `parts/`**, named for the paper's slug,
+  carrying `kind: paper`, `paper: <slug>` and no `part:` key, with the ordinary ten sections plus three — **the citation** (title, year, venue or arXiv ID, a free link,
   and the date you read it) after the one-line answer, **the demo** after the mechanism, and **what
   it did not claim** after the walkthrough. Cite by title; **never by author name** — `et al.` fails
   `./o depth`.
@@ -105,7 +109,7 @@ days/day-NNN-<day-slug>/
   that run, the command, the real output pasted, ideally written twice (without the mechanism, then
   with it). It is teaching code, written out in full, typed into the day's gitignored `lab/`.
 - **A paper is explained once in the whole curriculum.** A later day declares the slug and links that
-  part; it never re-explains it.
+  file; it never re-explains it, and it never copies it into its own `papers/`.
 - **The story comes first and carries no jargon** — a concrete scene, a person, a failure, a
   decision. It is the hook the definition hangs on, not decoration.
 - **`In production` is not optional.** A part that shows the idea working on one request and never

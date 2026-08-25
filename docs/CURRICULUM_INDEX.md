@@ -1,6 +1,6 @@
 # 📇 Curriculum index — Project Kriya
 
-_Generated 2026-08-25 by `scripts/trace.py` from the master plan's §14._
+_Generated 2026-08-26 by `scripts/trace.py` from the master plan's §14._
 **Do not edit by hand.**
 
 §14 answers *what does day 115 teach?* This file answers the reverse — *where do I learn

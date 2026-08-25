@@ -68,7 +68,7 @@ the resource envelope, not a change to the curriculum.
 
 ---
 
-## v1.1.0 — 2026-08-25 — research is taught, not cited: the paper part
+## v1.1.0 — 2026-08-25 — research is taught, not cited: the `papers/` folder
 
 **Trigger.** A large share of what this curriculum teaches is not folklore — it is a published
 result that a community argued about, measured, and eventually shipped as a default in a config
@@ -83,12 +83,13 @@ document of its own held to the same standard as every other document.
 
 **Amendment.**
 
-- **§17.4.2 is new — *The paper part*.** When an idea comes from research, the research is taught in
-  a part of its own, written to the same ten-section contract as every other part: its own story,
+- **§17.4.2 is new — *The `papers/` folder*.** When an idea comes from research, the research is
+  taught in a document of its own — `days/day-NNN-<slug>/papers/<paper-slug>.md`, a sibling of `parts/`
+  — written to the same ten-section contract as every other part: its own story,
   its own mechanism with the numbers the paper actually reported, its own failure mode, its own
   production face, its own check. **If the paper is worth citing it is worth a part; if it is not
   worth a part, it is not cited.**
-- **Three extra sections, only on a paper part.** *The citation* (title verbatim, year, venue or
+- **Three extra sections, only on a paper document.** *The citation* (title verbatim, year, venue or
   arXiv identifier, a link that is free to read, and the date it was read) immediately after the
   one-line answer; ***The demo*** immediately after *The mechanism*; and ***What it did not claim***
   after the walkthrough. The last is the one that earns the part: most of the damage a famous paper
@@ -118,11 +119,43 @@ document of its own held to the same standard as every other document.
 
 **Days 0–11 were retrofitted** under the same amendment rather than being left on the old contract:
 `papers: []` was recorded on every existing part, and the parts whose mechanism genuinely rests on
-published research gained the paper part that grounds them.
+published research gained the `papers/` document that grounds them.
 
 **Not changed.** No day, no phase, no ID, no gate, no principle. The ten sections of an ordinary
 part are untouched and in the same order. This adds a kind of part; it relaxes nothing.
 
 **Supporting decision:** ADR-0005.
+
+---
+
+## 2026-08-26 — papers are opt-in: a day generator never writes one
+
+**Trigger.** v1.1.0 gave research a home and, in the same breath, told the day generator to go and
+find it. Reviewing the first paper document made the hazard in that second half plain: a generator
+asked *"where did this mechanism come from?"* on every part of every day will eventually answer with
+a paper that does not exist. A fabricated citation is more convincing than a fabricated flag and far
+harder to catch, and Principle 8 does not bend for footnotes.
+
+**Amendment.**
+
+- **§17.4.2 gains an opening rule: a paper document is written on request, never by default.**
+  `/day-kriya N` creates no `papers/` folder and writes no paper document; **every part of a
+  generated day declares `papers: []`**. If a day's mechanism plainly rests on published work, the
+  generator says so at the end and stops there.
+- **The `day-kriya` skill loses its research steps** — the "find the papers, and open them" lookup,
+  the "every paper gets a document" split rule, and the paper-document shape. What remains is the
+  prohibition: never invent a citation, never name a paper inside a part.
+- **The `review-day` skill stops treating `papers: []` as a finding.** It is the expected state of a
+  generated day. The paper checks now run only when a day has a `papers/` folder.
+
+**Not changed.** Everything §17.4.2 says about *how* a paper is written when one is written: the
+citation with its read-date, the demo, *what it did not claim*, one document per paper, cited by
+title and never by author. `scripts/depth_check.py` is untouched — it already enforced that contract
+only where a paper actually exists. Day 7's `papers/congestion-avoidance-and-control.md` stands as
+the worked example, and the `papers:` key stays on every part.
+
+**Why keep the contract at all.** Because the standard is the useful half. When research *is* written
+up here, it is held to it; what is removed is the instruction to go hunting for research on every
+day, which is where the invented citation would have come from.
 
 ---

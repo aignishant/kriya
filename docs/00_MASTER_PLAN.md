@@ -1116,11 +1116,20 @@ days/day-NNN-<day-slug>/
 │   │   └── 2.2-<slug>.md
 │   └── 03-<slug>/
 │       └── 3.1-<slug>.md
+├── papers/            # THE RESEARCH — one document per paper (§17.4.2); absent if the day cites none
+│   └── <paper-slug>.md
 └── lab/               # created by ./o scaffold NNN; the learner's own scratch code
 ```
 
 `parts/` is mandatory. **A day with no `parts/` directory is, by definition, not written** — the
 tracker reports it as pending and the phase gate cannot go green.
+
+`papers/` is present exactly when the day teaches a paper (§17.4.2), and it is a **sibling of
+`parts/`, never a section inside it**. A paper is not a subtopic of the day: it is the source the
+day's subtopics rest on, it is cited by later days as often as by this one, and numbering it into one
+day's section order would bury a curriculum-wide document inside one day's reading sequence. A paper
+document is named for its slug and nothing else — `papers/congestion-avoidance-and-control.md` —
+because that slug is what every `papers:` field in the curriculum points at.
 
 **Every folder name carries its subject.** A number alone tells a reader nothing: `days/day-143/` and
 `parts/02/` are addresses, not answers, and 237 days of them are indistinguishable in a file tree, a
@@ -1222,11 +1231,11 @@ These come from Principles 7, 8, 12, 13 and 15 and apply on top of the ten secti
    CI minutes (Principle 15 · Addendum 01). `0` is an answer; state it.
 6. **Never invent a citation.** A paper is a fact, exactly like a version or a flag (Principles 7
    and 8). Every part declares `papers:` — the slugs of the papers its idea rests on, or `[]`. A
-   paper named there is one you **opened**, and it is explained in a **paper part** of its own
+   paper named there is one you **opened**, and it is explained in a **paper document** of its own
    (§17.4.2), cited by title, year and identifier, never from memory and **never by author name**.
    If the paper cannot be reached, leave a `TODO` containing the exact lookup URL — never a guess.
 
-#### 17.4.2 The paper part — how research is taught here
+#### 17.4.2 The `papers/` folder — how research is taught here
 
 Some of what this curriculum teaches is folklore that hardened into practice; some of it is a
 **published result** that a named community argued about, measured, and eventually shipped.
@@ -1236,19 +1245,28 @@ arrived as a paper before it arrived as a flag in a config file.
 
 When an idea in this plan comes from research, **the paper is not a footnote. It is a part.**
 
-**The rule.** A paper is taught in a part document of its own, written to the same ten-section
-contract as every other part (§17.4) — its own story, its own mechanism, its own failure mode, its
+> **⚠️ A paper document is written on request, never by default.** Writing a day does **not** produce
+> one, and `/day-kriya N` never creates a `papers/` folder: the answer for every part of every
+> generated day is `papers: []`. The reason is Principle 8 and nothing else — a citation is the
+> easiest fact in this curriculum to fabricate, and a generator asked to go looking for research on
+> every mechanism will eventually find some that does not exist. So the research half of this
+> contract is **opt-in and deliberate**: a paper document exists because somebody chose to read that
+> paper and write it up, and the section below is the standard it is held to when they do. Day 7's
+> `papers/congestion-avoidance-and-control.md` is the worked example.
+
+**The rule, when a paper is written.** A paper is taught in a **document of its own, in the day's `papers/` folder**, written
+to the same ten-section contract as every other part (§17.4) — its own story, its own mechanism, its own failure mode, its
 own production face, its own check. A reading list at the bottom of a hub is not teaching, and a
 citation dropped inline is decoration. **If the paper is worth citing, it is worth a part; if it is
 not worth a part, do not cite it.**
 
 | Rule | The shape |
 | --- | --- |
-| **Identity** | A paper has one **slug** — kebab-case, from its title: `congestion-avoidance-and-control`. That slug is the part's filename slug, the value of its `paper:` key, and what every other part names in `papers:`. |
-| **Where it lives** | In the section folder of the concept it grounds, as **the last part of that section** — the section teaches the mechanism, then the paper says where the mechanism came from. A day whose *subject* is the research gives the papers a section of their own. |
-| **Frontmatter** | The standard keys, plus `kind: paper`, `paper: <slug>`, and `papers: [<slug>]`. `title` is the paper's real title, verbatim. |
+| **Identity** | A paper has one **slug** — kebab-case, from its title: `congestion-avoidance-and-control`. That slug is the filename, the value of its `paper:` key, and what every other part names in `papers:`. |
+| **Where it lives** | `days/day-NNN-<slug>/papers/<paper-slug>.md` — a **sibling of `parts/`**, not a section inside it (§17.2). It carries no `<section>.<subtopic>` number, because it is not a subtopic of this day: it is the source this day rests on, and the next day that rests on it links the same file. |
+| **Frontmatter** | `day`, `title`, `ids`, `level`, `kind: paper`, `paper: <slug>`, `papers: [<slug>]`, `prerequisites`, `prev`, `next`. **No `part:` key** — there is no section number to carry. `title` is the paper's real title, verbatim; `prev` is the part it grounds and `next` is the hub. |
 | **Three extra sections** | **The citation**, immediately after the one-line answer; **The demo**, immediately after *The mechanism*; and **What it did not claim**, after the walkthrough and before *When it breaks*. Everything else is the ordinary contract, in the ordinary order. |
-| **Explained once** | A paper gets exactly one paper part in the whole curriculum. A later day that rests on it declares the slug in `papers:` and **links that part** — Day 190 does not re-explain a paper Day 125 already taught, any more than it re-explains a process. |
+| **Explained once** | A paper gets exactly one document in the whole curriculum, in the `papers/` folder of the day that first needs it. A later day declares the slug in `papers:` and **links that file** (`../../day-007-.../papers/<slug>.md`) — Day 190 does not re-explain a paper Day 125 already taught, any more than it re-explains a process. |
 
 **The citation block** carries the title verbatim, the year, the venue or the arXiv identifier, a
 link to a copy that is free to read, and **the date you read it** — the same convention Principle 8
@@ -1278,7 +1296,7 @@ a famous paper is done by the sentence it never contained: the benchmark read as
 lab condition read as a default, the ablation read as a law. State the over-reading, name it, and
 say what the paper actually bounded its result to.
 
-**And the ordinary sections mean, for a paper part:**
+**And the ordinary sections mean, for a paper document:**
 
 | Section | For a paper |
 | --- | --- |
@@ -1290,10 +1308,11 @@ say what the paper actually bounded its result to.
 | **In production** | Which part of the paper is inside the tool you run today, which part never left the lab, and what the production version does differently — and why. |
 | **Check yourself** | Something the reader can run, compute or reproduce against the paper's own numbers — usually one edit to the demo — plus the out-loud question. |
 
-**`papers: []` is the common case, and it is a real answer.** Most parts of most days rest on no
-paper at all: there is no research behind `chmod`, and inventing one to fill a field would break
-Principle 8 in the most embarrassing way available. The field exists so the question gets asked on
-every part, and so the answer is auditable — exactly like `0` in a cost budget.
+**`papers: []` is the default, and it is a real answer.** Most parts of most days rest on no paper
+at all: there is no research behind `chmod`, and inventing one to fill a field would break Principle 8
+in the most embarrassing way available. **A generated day declares `[]` everywhere**; the field is
+there so that a slug, when one does appear, is a route to a document somebody actually wrote —
+exactly like `0` in a cost budget.
 
 
 ### 17.5 What the hub (`LESSON.md`) must contain
@@ -1359,7 +1378,7 @@ fully explained — *including its production face* — and not before.
 | `incident` | one stage of the incident per part: detect → triage → mitigate → resolve → learn |
 | `gate` | one acceptance criterion per part |
 | `capstone` | one component per part, in build order |
-| any day citing research | **one paper per part** (§17.4.2), placed last in the section whose mechanism it grounds |
+| any day citing research | **one document per paper** in the day's `papers/` folder (§17.4.2), never squeezed into a part |
 
 There is deliberately **no target part count and no target length**. If a subject needs four parts it
 gets four; if it needs twenty-two it gets twenty-two, and the day simply spans more sittings
@@ -1423,12 +1442,14 @@ It fails on:
 - a `level` outside `foundation` · `working` · `production`;
 - a part with no `papers:` key — the question must be asked on every part, and `[]` is the answer
   when there is no paper (§17.4.2);
-- a paper slug declared in `papers:` with no **paper part** teaching it, in this day or an earlier
-  one, and no link to that part from the part that declares it;
-- a `kind: paper` part missing its **citation** block, its identifier, the date it was read, its
+- a paper slug declared in `papers:` with no `papers/<slug>.md` teaching it, in this day or an
+  earlier one, and no link to that document from the part that declares it;
+- a `kind: paper` document inside `parts/`, or a document in `papers/` that is not `kind: paper`;
+- a `papers/` file whose name is not exactly its `paper:` slug;
+- a paper document missing its **citation** block, its identifier, the date it was read, its
   **demo**, or its **What it did not claim** section — or carrying those three out of contract order;
 - a citation by author name (`et al.`), which this curriculum never writes (§18.4);
-- a day that teaches a paper and whose hub §8 does not name it;
+- a day with a `papers/` folder whose hub §8 does not name every paper in it;
 - **any time estimate anywhere in a day folder** (Principle 17);
 - **a billable cloud command that is not marked 🅿️ parked** (Principle 15 · Addendum 01);
 - a hub that carries teaching, or whose §2 map does not link every part on disk;

@@ -109,6 +109,21 @@ PART_FRONTMATTER_KEYS = [
     "next",
 ]
 
+# A paper document (papers/<slug>.md) carries the same keys minus `part` - it has no section number,
+# because it is not a subtopic of the day - plus the two that give it its identity.
+PAPER_FRONTMATTER_KEYS = [
+    "day",
+    "title",
+    "ids",
+    "level",
+    "kind",
+    "paper",
+    "papers",
+    "prerequisites",
+    "prev",
+    "next",
+]
+
 # Principle 18: every part declares where it leaves the reader.
 LEVELS = {"foundation", "working", "production"}
 
@@ -392,47 +407,75 @@ def declared_papers(meta: dict[str, str] | None) -> list[str]:
 
 
 @lru_cache(maxsize=1)
-def paper_part_index() -> dict[str, Path]:
-    """Every `kind: paper` part in the curriculum, by slug.
+def paper_index() -> dict[str, Path]:
+    """Every paper document in the curriculum, by slug.
 
     A paper is explained once (§17.4.2) and linked forever after, so this index spans `days/` rather
     than one day: Day 190 may rest on a paper Day 125 taught, and re-explaining it would be the same
-    mistake as re-explaining a process. Cached because it reads every part in the repository and a
+    mistake as re-explaining a process. Cached because it reads every paper in the repository and a
     full run checks every written day.
     """
     index: dict[str, Path] = {}
-    for part in DAYS.glob("day-*/parts/*/*.md"):
-        meta = frontmatter(part.read_text(encoding="utf-8"))
-        if not meta or meta.get("kind", "").strip('"') != "paper":
-            continue
-        slug = meta.get("paper", "").strip('"')
+    for doc in DAYS.glob("day-*/papers/*.md"):
+        meta = frontmatter(doc.read_text(encoding="utf-8"))
+        slug = (meta or {}).get("paper", "").strip('"')
         if slug:
-            index[slug] = part
+            index[slug] = doc
     return index
 
 
-def check_paper_part(
-    path: Path, meta: dict[str, str], content: str, where: str, report: Report
-) -> None:
-    """The extra contract a `kind: paper` part carries (plan §17.4.2).
+def check_paper_doc(path: Path, day: int, report: Report) -> None:
+    """Validate one `papers/<paper-slug>.md` (plan §17.4.2).
 
-    Its two extra sections are checked for presence in `check_part`, alongside the ordinary ten, so
-    that ordering is judged once against one list. What is left here is what only a paper part can
-    get wrong: an identity that disagrees with its filename, and a citation nobody could follow.
+    A paper document is an ordinary part in every way the reader can see - the same ten sections,
+    in the same order - plus three of its own: the citation, the demo, and what the paper did not
+    claim. What differs mechanically is its identity: it carries no `<section>.<subtopic>` number,
+    because a paper is not a subtopic of the day but the source the day rests on.
     """
-    slug = meta.get("paper", "").strip('"')
-    if not slug:
-        report.fail(where, "kind: paper but no paper: <slug> - a paper's slug is its identity")
+    where = f"papers/{path.name}"
+    slug_from_name = path.stem
+    if not PAPER_SLUG_RE.fullmatch(slug_from_name):
+        report.fail(where, "a paper document is named <paper-slug>.md, kebab-case (§17.4.2)")
+
+    text = path.read_text(encoding="utf-8")
+    meta = frontmatter(text)
+    if meta is None:
+        report.fail(where, "no YAML frontmatter")
         return
-    name_match = PART_NAME_RE.match(path.name)
-    if name_match and name_match.group(3) != slug:
+
+    missing = [k for k in PAPER_FRONTMATTER_KEYS if k not in meta]
+    if missing:
+        report.fail(where, f"frontmatter missing {', '.join(missing)}")
+    if "part" in meta:
         report.fail(
             where,
-            f"paper: {slug!r} but the filename slug is {name_match.group(3)!r} - a paper part is "
-            f"named after its paper, so the two are the same string",
+            "carries a part: key - a paper is not a subtopic of this day and takes no section "
+            "number (§17.4.2)",
         )
-    if slug not in declared_papers(meta):
-        report.fail(where, f"a paper part declares its own slug in papers: [{slug}]")
+    if meta.get("kind", "").strip('"') != "paper":
+        report.fail(where, "everything in papers/ is kind: paper")
+    if meta.get("day") not in {str(day), f'"{day}"'}:
+        report.fail(where, f"frontmatter day is {meta.get('day')!r}, expected {day}")
+    level = meta.get("level", "").strip('"').lower()
+    if level and level not in LEVELS:
+        report.fail(where, f"level is {level!r}, must be one of {sorted(LEVELS)}")
+
+    slug = meta.get("paper", "").strip('"')
+    if not slug:
+        report.fail(where, "no paper: <slug> - a paper's slug is its identity")
+    elif slug != slug_from_name:
+        report.fail(
+            where,
+            f"paper: {slug!r} but the file is named {slug_from_name!r} - a paper document is named "
+            f"after its paper, so the two are the same string",
+        )
+    elif slug not in declared_papers(meta):
+        report.fail(where, f"a paper document declares its own slug in papers: [{slug}]")
+
+    content = body(text)
+    check_sections(content, True, where, report)
+    for line_no in unexplained_code_blocks(content):
+        report.fail(where, f"code block at line {line_no} has no 'Line by line' walkthrough")
 
     # §17.4.2: the demo is a project, not a paragraph about one - so it has something to run.
     demo = section_text(content, PAPER_SECTIONS["the mechanism"][1])
@@ -444,18 +487,23 @@ def check_paper_part(
         )
 
     citation = section_text(content, PAPER_SECTIONS["one-line answer"][1])
-    if citation is None:
-        return  # the missing-section failure was already reported
-    if not CITATION_URL_RE.search(citation):
-        report.fail(where, "the citation has no link to a copy that is free to read (§17.4.2)")
-    if not CITATION_YEAR_RE.search(citation):
-        report.fail(where, "the citation names no year (§17.4.2)")
-    if not READ_DATE_RE.search(citation):
-        report.fail(
-            where,
-            "the citation has no YYYY-MM-DD date it was read - a paper you did not open is an "
-            "invented fact (§17.4.1 rule 6)",
-        )
+    if citation is not None:
+        if not CITATION_URL_RE.search(citation):
+            report.fail(where, "the citation has no link to a copy that is free to read (§17.4.2)")
+        if not CITATION_YEAR_RE.search(citation):
+            report.fail(where, "the citation names no year (§17.4.2)")
+        if not READ_DATE_RE.search(citation):
+            report.fail(
+                where,
+                "the citation has no YYYY-MM-DD date it was read - a paper you did not open is an "
+                "invented fact (§17.4.1 rule 6)",
+            )
+
+    check_papers(meta, content, where, report)
+    check_no_clocks(text, where, report)
+    check_no_billing(text, where, report)
+    if slug:
+        report.papers_taught.add(slug)
 
 
 def section_text(content: str, pattern: re.Pattern[str]) -> str | None:
@@ -469,9 +517,9 @@ def section_text(content: str, pattern: re.Pattern[str]) -> str | None:
 
 
 def part_sections(is_paper: bool) -> list[tuple[str, re.Pattern[str]]]:
-    """The required sections for this part, in contract order (plan §17.4, §17.4.2).
+    """The required sections for this document, in contract order (plan §17.4, §17.4.2).
 
-    An ordinary part carries the ten. A paper part carries the same ten with two spliced in at fixed
+    An ordinary part carries the ten. A paper carries the same ten with three spliced in at fixed
     positions, so one ordering check covers both and a citation cannot drift to the bottom of the
     page where nobody reads it.
     """
@@ -483,6 +531,25 @@ def part_sections(is_paper: bool) -> list[tuple[str, re.Pattern[str]]]:
         if name in PAPER_SECTIONS:
             out.append(PAPER_SECTIONS[name])
     return out
+
+
+def check_sections(content: str, is_paper: bool, where: str, report: Report) -> None:
+    """Every required section present, and in the order the contract puts them in."""
+    explainable = has_explainable_code(content)
+    seen_at: list[int] = []
+    expected = 0
+    for name, pattern in part_sections(is_paper):
+        if name in CONDITIONAL_SECTIONS and not explainable:
+            continue  # nothing to explain, so the walkthrough would be empty ceremony
+        ordered = name not in ORDER_EXEMPT_SECTIONS
+        expected += ordered
+        found = pattern.search(content)
+        if not found:
+            report.fail(where, f"missing required section: {name}")
+        elif ordered:
+            seen_at.append(found.start())
+    if len(seen_at) == expected and seen_at != sorted(seen_at):
+        report.fail(where, "required sections are out of contract order (plan §17.4)")
 
 
 def check_part(path: Path, day: int, report: Report) -> tuple[int, int] | None:
@@ -520,46 +587,35 @@ def check_part(path: Path, day: int, report: Report) -> tuple[int, int] | None:
             report.fail(where, f"level is {level!r}, must be one of {sorted(LEVELS)}")
 
     content = body(text)
-    is_paper = bool(meta) and meta.get("kind", "").strip('"') == "paper"
-    explainable = has_explainable_code(content)
-    seen_at: list[int] = []
-    expected = 0
-    for name, pattern in part_sections(is_paper):
-        if name in CONDITIONAL_SECTIONS and not explainable:
-            continue  # nothing to explain, so the walkthrough would be empty ceremony
-        ordered = name not in ORDER_EXEMPT_SECTIONS
-        expected += ordered
-        found = pattern.search(content)
-        if not found:
-            report.fail(where, f"missing required section: {name}")
-        elif ordered:
-            seen_at.append(found.start())
-    if len(seen_at) == expected and seen_at != sorted(seen_at):
-        report.fail(where, "required sections are out of contract order (plan §17.4)")
+    if meta and meta.get("kind", "").strip('"') == "paper":
+        report.fail(
+            where,
+            "kind: paper inside parts/ - a paper is taught in the day's papers/ folder, beside "
+            "parts/, because it is the source the day rests on and not a subtopic of it (§17.4.2)",
+        )
+    check_sections(content, False, where, report)
 
     for line_no in unexplained_code_blocks(content):
         report.fail(where, f"code block at line {line_no} has no 'Line by line' walkthrough")
 
-    check_papers(path, meta, content, where, is_paper, report)
+    check_papers(meta, content, where, report)
     check_no_clocks(text, where, report)
     check_no_billing(text, where, report)
     return section, subtopic
 
 
 def check_papers(
-    path: Path,
     meta: dict[str, str] | None,
     content: str,
     where: str,
-    is_paper: bool,
     report: Report,
 ) -> None:
-    """Plan §17.4.2: what a part says about the research it rests on.
+    """Plan §17.4.2: what a document says about the research it rests on.
 
-    Three things are checkable here. That a citation is a title rather than a person (§18.4). That a
-    part naming a paper links the part which teaches it, so the slug is a route and not a label. And
-    that a paper part is itself well formed. Whether the slug resolves to a paper part at all is a
-    curriculum-wide question, so `check_day` answers it.
+    Two things are checkable per document. That a citation is a title rather than a person (§18.4),
+    and that a document naming a paper **links** the file which teaches it, so the slug is a route
+    and not a label. Whether the slug resolves to a paper at all is a curriculum-wide question, so
+    `check_day` answers it.
     """
     author = AUTHOR_CITE_RE.search(content)
     if author:
@@ -569,20 +625,16 @@ def check_papers(
             f"identifier, and this curriculum names no people (§18.4)",
         )
 
-    slugs = declared_papers(meta)
-    if is_paper and meta:
-        check_paper_part(path, meta, content, where, report)
-        report.papers_taught.add(meta.get("paper", "").strip('"'))
-
-    for slug in slugs:
+    own = (meta or {}).get("paper", "").strip('"')
+    for slug in declared_papers(meta):
         report.papers_declared.append((slug, where))
-        if is_paper and meta and slug == meta.get("paper", "").strip('"'):
-            continue  # the paper part is the explanation; it does not link to itself
-        if f"-{slug}.md" not in content:
+        if slug == own:
+            continue  # the paper document is the explanation; it does not link to itself
+        if f"papers/{slug}.md" not in content:
             report.fail(
                 where,
-                f"declares papers: [{slug}] but links no paper part teaching it - a slug is a "
-                f"route to the document that explains it, not a label (§17.4.2)",
+                f"declares papers: [{slug}] but links no papers/{slug}.md teaching it - a slug is "
+                f"a route to the document that explains it, not a label (§17.4.2)",
             )
 
 
@@ -651,6 +703,14 @@ def check_hub(folder: Path, part_count: int, report: Report) -> None:
     check_no_clocks(text, "LESSON.md", report)
     check_no_billing(text, "LESSON.md", report)
 
+    for doc in sorted((folder / "papers").glob("*.md")) if (folder / "papers").is_dir() else []:
+        if f"papers/{doc.name}" not in content:
+            report.fail(
+                "LESSON.md",
+                f"does not link papers/{doc.name} - the day's research belongs in its map, not "
+                f"only in its file tree (§17.5)",
+            )
+
     linked = set(re.findall(r"parts/([\w.\-]+/[\w.\-]+\.md)", content))
     on_disk = {
         f"{d.name}/{f.name}"
@@ -707,16 +767,23 @@ def check_day(number: int) -> Report:
     numbers = [n for f in files if (n := check_part(f, number, report)) is not None]
     check_numbering(numbers, report)
 
-    # A paper slug must resolve to the part that teaches it - in this day, or in an earlier one that
-    # already taught it (§17.4.2). A slug that resolves nowhere is a citation with no paper behind
-    # it, which is the failure Principle 8 cares about most.
-    index = paper_part_index()
+    papers_dir = folder / "papers"
+    if papers_dir.is_dir():
+        for doc in sorted(papers_dir.glob("*.md")):
+            check_paper_doc(doc, number, report)
+        for stray in sorted(p for p in papers_dir.iterdir() if p.suffix != ".md"):
+            report.fail(f"papers/{stray.name}", "papers/ holds one .md per paper, nothing else")
+
+    # A paper slug must resolve to the document that teaches it - in this day, or in an earlier one
+    # that already taught it (§17.4.2). A slug that resolves nowhere is a citation with no paper
+    # behind it, which is the failure Principle 8 cares about most.
+    index = paper_index()
     for slug, where in report.papers_declared:
         if slug not in index:
             report.fail(
                 where,
-                f"papers: [{slug}] names no paper part - a paper worth citing is taught in a part "
-                f"of its own, and one that is not worth a part is not cited (§17.4.2)",
+                f"papers: [{slug}] names no papers/{slug}.md - a paper worth citing is taught in a "
+                f"document of its own, and one that is not worth that is not cited (§17.4.2)",
             )
 
     check_hub(folder, len(files), report)

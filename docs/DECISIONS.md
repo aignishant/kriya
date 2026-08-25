@@ -26,4 +26,4 @@ The last two are what separate an ADR that ages well from a paragraph of self-ju
 | [ADR-0002](adr/ADR-0002-depth-contract.md) | 2026-08-24 | accepted | A day is a hub plus one document per subtopic, machine-checked, with no clocks anywhere. |
 | [ADR-0003](adr/ADR-0003-zero-cost-and-local-first.md) | 2026-08-24 | accepted | Zero cost, local-first, open-source-only stack; managed services are 🅿️ parked. |
 | [ADR-0004](adr/ADR-0004-fundamentals-before-ai.md) | 2026-08-24 | accepted | Eighty-four days of platform, observability and SRE come before the first model is trained. |
-| [ADR-0005](adr/ADR-0005-the-paper-part.md) | 2026-08-25 | accepted | Research is taught as a part of its own — `kind: paper`, a citation block and *What it did not claim* — never as a footnote. |
+| [ADR-0005](adr/ADR-0005-the-paper-part.md) | 2026-08-25 | accepted (amended 2026-08-26) | Research is taught as a document of its own in `papers/` — never as a footnote — and it is written on request, never by the day generator. |
