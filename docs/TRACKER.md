@@ -1,7 +1,7 @@
 ---
 name: tracker
 plan: kriya
-generated: "2026-08-24"
+generated: "2026-08-25"
 generator: scripts/tracker.py
 ---
 
@@ -15,14 +15,14 @@ generator: scripts/tracker.py
 
 | | Count | Of total |
 |---|---|---|
-| 📄 Days written in the hub + parts/ shape | **4** | 1.7% |
-| 📚 Sub-topic documents in `parts/` | **59** | — |
+| 📄 Days written in the hub + parts/ shape | **12** | 5.1% |
+| 📚 Sub-topic documents in `parts/` | **190** | — |
 | ✅ Days completed (checklist fully ticked) | **1** | 0.4% |
-| ⬜ Never written | **233** | 98.3% |
+| ⬜ Never written | **225** | 94.9% |
 | Total days in plan | 237 | (Day 0 + Days 1–236) |
 
 ```
-written  █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  4/237
+written  ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  12/237
 complete ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  1/237
 ```
 
@@ -33,8 +33,8 @@ complete ░░░░░░░░░░░░░░░░░░░░░░░�
 | Phase | Theme | Days | Written | Parts | Done |
 |---|---|---|---|---|---|
 | 0 | Foundry | 0 | 1/1 | 19 | 1/1 |
-| 1 | The production mental model and the machine | 1–10 | 3/10 | 40 | 0/10 |
-| 2 | Change: version control, CI and releases | 11–20 | 0/10 | 0 | 0/10 |
+| 1 | The production mental model and the machine | 1–10 | 10/10 | 154 | 0/10 |
+| 2 | Change: version control, CI and releases | 11–20 | 1/10 | 17 | 0/10 |
 | 3 | Containers | 21–30 | 0/10 | 0 | 0/10 |
 | 4 | Kubernetes I — the objects | 31–40 | 0/10 | 0 | 0/10 |
 | 5 | Kubernetes II — running it well | 41–50 | 0/10 | 0 | 0/10 |
@@ -72,19 +72,19 @@ complete ░░░░░░░░░░░░░░░░░░░░░░░�
 | 1 | What operations actually is — the day the code met real traffic, and the repo that rememb… | FND-01, FND-02 | 📄 written | 13 | 36 |
 | 2 | The shape of a production system — the request path, the dependencies, the state, and the… | FND-03 | 📄 written | 13 | 47 |
 | 3 | `pulse` v0 — the service you will operate for the next two hundred days | FND-04 | 📄 written | 14 | 61 |
-| 4 | Linux for operators I — processes, signals, exit codes, and what "the service died" reall… | FND-05 | ⬜ pending | — | — |
-| 5 | Linux for operators II — the filesystem, permissions, the disk that fills, the log that m… | FND-06 | ⬜ pending | — | — |
-| 6 | Resources — CPU, memory, the OOM killer, and why your process was simply `Killed` | FND-07 | ⬜ pending | — | — |
-| 7 | Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system | FND-08, FND-09 | ⬜ pending | — | — |
-| 8 | HTTP and TLS in production — status codes that mean something, keep-alive, and the certif… | FND-10 | ⬜ pending | — | — |
-| 9 | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to s… | FND-11, FND-12, SEC-01 | ⬜ pending | — | — |
-| 10 | Environments and promotion — what the word "production" actually promises | FND-13 | ⬜ pending | — | — |
+| 4 | Linux for operators I — processes, signals, exit codes, and what "the service died" reall… | FND-05 | 📄 written | 14 | 83 |
+| 5 | Linux for operators II — the filesystem, permissions, the disk that fills, the log that m… | FND-06 | 📄 written | 15 | 97 |
+| 6 | Resources — CPU, memory, the OOM killer, and why your process was simply `Killed` | FND-07 | 📄 written | 13 | 95 |
+| 7 | Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system | FND-08, FND-09 | 📄 written | 17 | 120 |
+| 8 | HTTP and TLS in production — status codes that mean something, keep-alive, and the certif… | FND-10 | 📄 written | 20 | 175 |
+| 9 | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to s… | FND-11, FND-12, SEC-01 | 📄 written | 21 | 175 |
+| 10 | Environments and promotion — what the word "production" actually promises | FND-13 | 📄 written | 14 | 141 |
 
 ### Phase 2 — Change: version control, CI and releases (Days 11–20)
 
 | Day | Title | IDs | Status | Parts | Open boxes |
 |---|---|---|---|---|---|
-| 11 | Version control for operators — the history you will read at 2am, and the commit that exp… | FND-14 | ⬜ pending | — | — |
+| 11 | Version control for operators — the history you will read at 2am, and the commit that exp… | FND-14 | 📄 written | 17 | 163 |
 | 12 | Branching, review and the change that can be reverted | FND-15 | ⬜ pending | — | — |
 | 13 | The first pipeline — continuous integration that can genuinely fail | PLT-01, PLT-02 | ⬜ pending | — | — |
 | 14 | Quality gates — lint, format, types, tests, and a gate that refuses rather than warns | PLT-03 | ⬜ pending | — | — |
@@ -420,14 +420,14 @@ complete ░░░░░░░░░░░░░░░░░░░░░░░�
 
 The next ten days to write, in order:
 
-- **Day 4** — Linux for operators I — processes, signals, exit codes, and what "the service died" really means `(FND-05)`
-- **Day 5** — Linux for operators II — the filesystem, permissions, the disk that fills, the log that must rotate `(FND-06)`
-- **Day 6** — Resources — CPU, memory, the OOM killer, and why your process was simply `Killed` `(FND-07)`
-- **Day 7** — Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system `(FND-08, FND-09)`
-- **Day 8** — HTTP and TLS in production — status codes that mean something, keep-alive, and the certificate that expires on a Sunday `(FND-10)`
-- **Day 9** — Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to start rather than failing late `(FND-11, FND-12, SEC-01)`
-- **Day 10** — Environments and promotion — what the word "production" actually promises `(FND-13)`
-- **Day 11** — Version control for operators — the history you will read at 2am, and the commit that explains itself `(FND-14)`
 - **Day 12** — Branching, review and the change that can be reverted `(FND-15)`
 - **Day 13** — The first pipeline — continuous integration that can genuinely fail `(PLT-01, PLT-02)`
+- **Day 14** — Quality gates — lint, format, types, tests, and a gate that refuses rather than warns `(PLT-03)`
+- **Day 15** — Build artifacts and reproducibility — the lockfile, the hash, and the first SBOM `(PLT-04, SEC-02)`
+- **Day 16** — Versioning and releases — semantic versions, tags, changelogs, and the artifact that *is* the release `(PLT-05)`
+- **Day 17** — Secrets in CI — the token that must never be printed, and the scan that proves it was not `(SEC-03)`
+- **Day 18** — Deployment strategies on paper — recreate, rolling, blue/green, canary, and what each one costs `(PLT-06)`
+- **Day 19** — Rollback is a feature — the undo you rehearse before you need it `(PLT-07)`
+- **Day 20** — Measuring change — the four delivery metrics, computed from your own repository `(FND-16, OBS-01)`
+- **Day 21** — Why containers — the "works on my machine" bug, solved and not solved `(PLT-08)`
 

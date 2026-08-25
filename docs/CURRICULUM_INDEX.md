@@ -24,7 +24,7 @@ remember. Every ID appears exactly once; a duplicate or a missing ID is a plan b
 | `FND-11` | [9](../days/day-009-configuration-and-secrets/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
 | `FND-12` | [9](../days/day-009-configuration-and-secrets/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
 | `FND-13` | [10](../days/day-010-environments-and-promotion/LESSON.md) | Environments and promotion — what the word "production" actually promises |
-| `FND-14` | [11](../days/day-011/LESSON.md) | Version control for operators — the history you will read at 2am, and the commit that e… |
+| `FND-14` | [11](../days/day-011-version-control-for-operators/LESSON.md) | Version control for operators — the history you will read at 2am, and the commit that e… |
 | `FND-15` | [12](../days/day-012/LESSON.md) | Branching, review and the change that can be reverted |
 | `FND-16` | [20](../days/day-020/LESSON.md) | Measuring change — the four delivery metrics, computed from your own repository |
 | `FND-17` | [229](../days/day-229/LESSON.md) | The production readiness review — the checklist you now actually understand |
