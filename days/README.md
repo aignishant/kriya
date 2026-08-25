@@ -94,7 +94,7 @@ and `./o depth NNN` fails the day if any of them is missing.
 
 | Section | What it's for |
 | --- | --- |
-| **frontmatter** | `day`, `part`, `title`, `ids`, `level`, `prerequisites`, `prev`, `next` — machine-read. No duration field; see rule 5. |
+| **frontmatter** | `day`, `part`, `title`, `ids`, `level`, `papers`, `prerequisites`, `prev`, `next` — machine-read. No duration field; see rule 5. |
 | **One-line answer** | the whole claim in one sentence, before anything else |
 | **The story** | a concrete scene — a person, a machine, a failure, a decision — with no jargon at all. The hook the definition hangs on. |
 | **The idea in plain language** | the concept from zero, every term defined the first time it appears, no code |
@@ -104,6 +104,32 @@ and `./o depth NNN` fails the day if any of them is missing.
 | **When it breaks** | the **real** error text, what it means, the smallest fix |
 | **In production** | what changes in a real system: the professional's version, what degrades at scale, the senior reviewer's comment, **the signal you would alert on**, the interviewer's question |
 | **Check yourself** | one command to run now, one question to answer out loud |
+
+### When the idea came from a paper
+
+Some of what this curriculum teaches is folklore that hardened into practice. Some of it is a
+**published result** — exponential backoff, tail latency, the container's resource box — that
+arrived as a paper years before it arrived as a flag in a config file.
+
+**When an idea comes from research, the paper gets a part of its own** (plan §17.4.2), written to
+the same contract as every other part: its own story, its own mechanism with the numbers the paper
+actually reported, its own failure mode, its own production face. A reading list at the bottom of a
+hub is not teaching, and a citation dropped inline is decoration. If the paper is worth citing, it
+is worth a part; if it is not worth a part, it is not cited.
+
+| | |
+| --- | --- |
+| **Where it sits** | last in the section folder whose mechanism it grounds — you learn the mechanism, then where it came from |
+| **Frontmatter** | the usual keys, plus `kind: paper` and `paper: <slug>`; `title` is the paper's real title |
+| **The citation** | after the one-line answer: title, year, venue or arXiv ID, a link that is free to read, **and the date you read it** |
+| **The demo** | after the mechanism: a small end-to-end project implementing **only** the paper's feature — fewest files, the command, the real output. Usually written twice: without the idea, then with it. |
+| **What it did not claim** | after the walkthrough: the over-reading the industry did, and what the paper actually bounded its result to |
+| **Cited by title** | never by author name — this curriculum names no people, and `et al.` fails `./o depth` |
+
+Every part — paper part or not — declares `papers:` in its frontmatter: the slugs it rests on, or
+`[]`. **`[]` is the common case and a real answer.** There is no research behind `chmod`, and a
+citation invented to fill a field is the same failure as an invented flag. A paper is explained
+**once** in the whole curriculum; later days declare its slug and link the part.
 
 ### `level` — where a part leaves you
 
@@ -130,7 +156,7 @@ The hub orients and assembles. **It never teaches** — there is no line-by-line
 | **§5 The check** | the check that must be able to **fail** (Principle 11) |
 | **§6 Cost & quota budget** | requests, tokens, RAM, disk, CI minutes (Principle 15) |
 | **§7 Traps** | the mistakes that eat an evening |
-| **§8 Verify before you build** | the live docs pages to check (Principle 8) |
+| **§8 Verify before you build** | the live docs pages to check (Principle 8), and every paper the day teaches |
 | **§9 Say it in an interview** | one paragraph, spoken voice |
 | **§10 Done when** | pointer to `CHECKLIST.md` — defined by understanding, never by elapsed time |
 | **§11 Ledger & commit** | the verbatim ledger rows and the commit message. Every day ends the same way. |

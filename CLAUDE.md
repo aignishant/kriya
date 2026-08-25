@@ -5,7 +5,7 @@ for AI systems** (Day 0 + Days 1–236) covering **MLOps · LLMOps · AIOps · A
 top of an explicit foundation of Linux, delivery, containers, Kubernetes, infrastructure as code,
 observability and SRE practice.
 
-The single source of truth is `docs/00_MASTER_PLAN.md` ("the plan"), currently **v1.0.0**.
+The single source of truth is `docs/00_MASTER_PLAN.md` ("the plan"), currently **v1.1.0**.
 Progress is `docs/PROGRESS.md` (the last row is where we are) and `docs/TRACKER.md` (generated).
 Traceability is `docs/TRACEABILITY.md` (generated). Amendments are logged in
 `docs/CHANGELOG_PLAN.md`.
@@ -69,7 +69,8 @@ days/day-NNN-<day-slug>/
 ├── parts/         # THE TEACHING — one document per subtopic, numbered <section>.<subtopic>
 │   ├── 01-<slug>/
 │   │   ├── 1.1-<slug>.md
-│   │   └── 1.2-<slug>.md
+│   │   ├── 1.2-<slug>.md
+│   │   └── 1.3-<paper-slug>.md   # a paper part, last in its section (§17.4.2)
 │   └── 02-<slug>/
 │       └── 2.1-<slug>.md
 └── lab/           # the learner's own code
@@ -92,6 +93,19 @@ days/day-NNN-<day-slug>/
 - **Every part carries all ten required sections in order**: frontmatter · one-line answer ·
   **the story** · the idea in plain language · **why Kriya needs it** · the mechanism · line by
   line · when it breaks · **in production** · check yourself. See plan §17.4.
+- **Every part declares `papers:`** — the slugs of the papers its idea rests on, or `[]`. `[]` is the
+  common case and a real answer, exactly like `0` in a cost budget. **Never invent a citation.**
+- **A paper is taught in a part of its own** (§17.4.2), never as a footnote or a reading list:
+  `kind: paper`, `paper: <slug>`, placed last in the section whose mechanism it grounds, carrying the
+  ordinary ten sections plus three — **the citation** (title, year, venue or arXiv ID, a free link,
+  and the date you read it) after the one-line answer, **the demo** after the mechanism, and **what
+  it did not claim** after the walkthrough. Cite by title; **never by author name** — `et al.` fails
+  `./o depth`.
+- **The demo is a small end-to-end project implementing only the paper's feature** — fewest files
+  that run, the command, the real output pasted, ideally written twice (without the mechanism, then
+  with it). It is teaching code, written out in full, typed into the day's gitignored `lab/`.
+- **A paper is explained once in the whole curriculum.** A later day declares the slug and links that
+  part; it never re-explains it.
 - **The story comes first and carries no jargon** — a concrete scene, a person, a failure, a
   decision. It is the hook the definition hangs on, not decoration.
 - **`In production` is not optional.** A part that shows the idea working on one request and never
@@ -108,13 +122,15 @@ days/day-NNN-<day-slug>/
   code blocks, a smuggled-in clock, an unmarked billable command, and a hub that carries teaching.
   **Never hand-wave past a `depth` failure.**
 
-### Kriya's five additional part rules (plan §17.4.1)
+### Kriya's six additional part rules (plan §17.4.1)
 
 1. **Never invent an API, a flag or a field** — name the official page checked, inline, with a date.
 2. **Never invent a version** — state the verified version, or a `TODO` with the exact lookup command.
 3. **Name the blast radius** of any new capability: worst case, who can trigger it, what bounds it.
 4. **Say how you would alert on any new signal** — or say explicitly that you would not, and why.
 5. **State the cost in quota units** — requests, tokens, RAM, disk, CI minutes. `0` is an answer.
+6. **Never invent a citation.** A paper is a fact like a version or a flag: opened and dated, or a
+   `TODO` with the exact lookup URL. If it is worth citing it gets a part; if not, it is not cited.
 
 ### Generating a day
 

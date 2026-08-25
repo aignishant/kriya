@@ -4,7 +4,7 @@ description: Generate the hub, the parts/ sub-documents, the lab scaffold and th
 argument-hint: [day-number]
 ---
 
-# Generate Day $ARGUMENTS of the Kriya plan (v1.0.0 — hub + `parts/`)
+# Generate Day $ARGUMENTS of the Kriya plan (v1.1.0 — hub + `parts/`)
 
 > **Read `docs/00_MASTER_PLAN.md` §17 before writing a single line.** It is the depth contract this
 > skill implements. This skill is the procedure; §17 is the standard.
@@ -57,52 +57,66 @@ argument-hint: [day-number]
 9. **Never invent a model name.** Any day that names a model looks up the provider's current free
    list first (Gemini AI Studio · console.groq.com/settings/limits · openrouter.ai filtered to
    `:free`) and records model + date. Free rosters move.
-10. **MCP days:** check the specification revision on the spec page before writing. If it moved,
+10. **Find the papers, and open them.** For every mechanism the day teaches, ask where it came
+    from. If the answer is a published result — backoff, tail latency, the resource box, technical
+    debt in ML systems, retrieval augmentation, the agent loop — **fetch the paper itself**, not a
+    summary of it, and note the title, the year, the venue or arXiv ID, a URL that is free to read
+    and today's date. **Never cite from memory** (§17.4.1 rule 6): a plausible title, year and venue
+    cost nothing to emit and are expensive to catch. If a paper cannot be reached, leave a `TODO`
+    with the exact lookup URL. If the honest answer is "no paper", that is `papers: []` and it is
+    the common case.
+11. **MCP days:** check the specification revision on the spec page before writing. If it moved,
     amend first (Principle 14).
-11. **Cost check.** If the day would tell the reader to run anything billable, it is wrong. Rework
+12. **Cost check.** If the day would tell the reader to run anything billable, it is wrong. Rework
     it to the local equivalent, or park the topic 🅿️ with a full teaching part and no build step.
 
 ## Step 3 — plan the split (do this before writing prose)
 
-12. List the day's subtopics. Group them into **sections** that share one mental model — usually one
+13. List the day's subtopics. Group them into **sections** that share one mental model — usually one
     section per curriculum ID, per lifecycle stage, or per phase of a mechanism. State the grouping
     in the hub; an unexplained numbering is a bug.
-13. Split by **idea boundaries, never by length or pace** (§17.7). There is no target part count.
+14. Split by **idea boundaries, never by length or pace** (§17.7). There is no target part count.
     Four parts if the subject needs four; twenty-two if it needs twenty-two. `setup` days split per
     tool or file; `lab` days per mechanism → behaviour → edge case → failure mode → production use;
     `concept` days one claim per part; `incident` days one stage per part; `gate` days one acceptance
     criterion per part.
-14. **Every day gets at least one part whose subject is a deliberate failure.** On the fifteen days
+15. **Every paper the day rests on gets a part of its own** (§17.4.2), placed **last in the
+    section whose mechanism it grounds** — the section teaches the mechanism, then the paper part
+    says where it came from, what it measured, and what never left the lab. Never squeeze a paper
+    into a paragraph inside another part, and never re-explain a paper an earlier day already
+    taught: declare its slug in `papers:` and link that part.
+16. **Every day gets at least one part whose subject is a deliberate failure.** On the fifteen days
     titled *"the … failure lab"*, that is the entire day.
-15. Assign each part a `level` — `foundation` (knows what it is), `working` (can use it on their own
+17. Assign each part a `level` — `foundation` (knows what it is), `working` (can use it on their own
     problem), `production` (knows what changes in a real system). A day should climb. A day that is
     all `foundation` is a tutorial; a day opening at `production` has skipped the reader.
-16. Apply the **one-idea test**, the **standalone test** and the **no-shortcut test** (no "for now,
+18. Apply the **one-idea test**, the **standalone test** and the **no-shortcut test** (no "for now,
     just accept that" without a forward link) to each planned part *before* writing.
-17. **Print the planned part list to me before writing.** If it looks thin, I will say so.
+19. **Print the planned part list to me before writing.** If it looks thin, I will say so.
 
 ## Step 4 — write the parts
 
 > Path: `days/day-NNN-<day-slug>/parts/<NN>-<section-slug>/<section>.<sub>-<slug>.md`
 
-18. **Name the day folder `days/day-NNN-<slug>/`** — the number zero-padded to **three** digits, then
+20. **Name the day folder `days/day-NNN-<slug>/`** — the number zero-padded to **three** digits, then
     a kebab-case slug of 1–4 words taken from the hub's `title` with articles dropped:
     `days/day-023-the-dockerfile-for-pulse/`. A number alone is an address, not an answer, and 237 of
     them are indistinguishable in a file tree. The number stays the identity — `./o`,
     `depth_check.py`, `tracker.py` and `trace.py` all resolve a day by number and accept any slug.
-19. **One folder per section**, two zero-padded digits **then a kebab-case slug of 1–3 words saying
+21. **One folder per section**, two zero-padded digits **then a kebab-case slug of 1–3 words saying
     what the section is about** — `parts/01-what-a-probe-is/`, `parts/03-failure-modes/`. Take the
     slug from the section's heading in the hub's §2 map. A bare `parts/01/` is rejected by `./o
     depth`. Every part lives inside its section's folder; none is ever loose in `parts/`, and the
     folder number must match the number before the dot in the filename.
-20. One file per subtopic, named `<section>.<subtopic>-<kebab-slug>.md`. The slug says what the part
+22. One file per subtopic, named `<section>.<subtopic>-<kebab-slug>.md`. The slug says what the part
     *teaches*, never where it sits. Numbering starts at `1` and has no gaps.
-21. **Links are relative to the part's own folder**: a sibling in the same section is
+23. **Links are relative to the part's own folder**: a sibling in the same section is
     `1.2-<slug>.md`; a part in another section is `../01-<slug>/1.5-<slug>.md`; the hub is
     `../../LESSON.md`. `prev` and `next` in the frontmatter use the same form. The hub's §2 map links
     the full path from the day folder: `parts/01-<slug>/1.1-<slug>.md`.
-22. Every part carries all ten sections of §17.4, **in this order**:
-    - **frontmatter** — `day`, `part`, `title`, `ids`, `level`, `prerequisites`, `prev`, `next`.
+24. Every part carries all ten sections of §17.4, **in this order**:
+    - **frontmatter** — `day`, `part`, `title`, `ids`, `level`, `papers`, `prerequisites`, `prev`,
+      `next`. `papers` is the list of paper slugs this part's idea rests on, or `[]`.
       **No duration field of any kind.**
     - **One-line answer** — the claim in one sentence, before anything else.
     - **The story** — a concrete scene first: a person, a machine, a failure, a decision. **No jargon
@@ -125,20 +139,36 @@ argument-hint: [day-number]
       the interview question that finds out whether you have actually used it. **Not optional. This
       is the section that makes the document professional rather than introductory.**
     - **Check yourself** — one command to run now, one question to answer out loud.
-23. Apply **Kriya's five additional part rules** (§17.4.1): name the official page checked, with a
+25. **A paper part** (`kind: paper`, `paper: <slug>`, filename slug = paper slug) carries those
+    same ten sections plus three, in these positions:
+    - **The citation**, immediately after the one-line answer — the title verbatim, the year, the
+      venue or arXiv identifier, a link to a copy that is free to read, and **the date you read it**.
+      By title. **Never by author name**; `et al.` fails `./o depth`.
+    - **The demo**, immediately after the mechanism — *a small end-to-end project that implements
+      only the paper's feature*. The fewest files that can run it, the command, and **the real output
+      pasted underneath**. Write it twice wherever the idea allows: once without the paper's
+      mechanism, once with it, so the reader watches the result fail to happen before it happens.
+      Stdlib unless the day already pinned the dependency; zero cost; typed into the day's gitignored
+      `lab/<paper-slug>/`. This is teaching code — write it out in full, not as `TODO(me)`.
+    - **What it did not claim**, after the walkthrough — the over-reading the industry did, and what
+      the paper actually bounded its result to. This is the section that earns the part.
+    And the ordinary sections mean, for a paper: *the story* is the world before the paper; *the
+    mechanism* is the actual algorithm with the numbers it reported; *when it breaks* is where the
+    result does not hold; *in production* is which half of it is inside the tool you run today.
+26. Apply **Kriya's six additional part rules** (§17.4.1): name the official page checked, with a
     date · state the verified version or a `TODO` with the lookup command · **name the blast radius**
     of any new capability (worst case, who can trigger it, what bounds it) · **say how you would
     alert** on any new signal, or why you would not · **state the cost in quota units** (requests,
-    tokens, RAM, disk, CI minutes; `0` is an answer).
-24. Mermaid diagram whenever the concept is spatial, sequential, or a state machine — a request path,
+    tokens, RAM, disk, CI minutes; `0` is an answer) · **never invent a citation**.
+27. Mermaid diagram whenever the concept is spatial, sequential, or a state machine — a request path,
     a rollout, a retry ladder, an incident timeline, an approval gate, a reconciliation loop.
 
 ## Step 5 — write the hub (`days/day-NNN-<slug>/LESSON.md`)
 
-25. The hub orients and assembles; **it never teaches**. No `Line by line:` in the hub. Required
+28. The hub orients and assembles; **it never teaches**. No `Line by line:` in the hub. Required
     sections, in order (§17.5):
     - YAML frontmatter (`day`, `phase`, `phase_name`, `title`, `ids`, `principles`, `kind`,
-      `plan_version: "v1.0.0"`, `parts`, `generated`, `status`, `lab_scaffolded`, `commit`)
+      `plan_version: "v1.1.0"`, `parts`, `generated`, `status`, `lab_scaffolded`, `commit`)
     - a **yesterday / today / tomorrow** blockquote — no time estimate
     - `## §1 Where we are` — a scene and an analogy, plain language, NO code, NO jargon
     - `## §2 The map` — a table of every part: number, linked title
@@ -152,7 +182,8 @@ argument-hint: [day-number]
     - `## §6 Cost & quota budget` — model calls per provider in RPM/RPD, CI minutes, RAM and disk for
       anything started today (`0` is an answer; state it)
     - `## §7 Traps` — the mistakes that eat an evening, including the named trap from §5.1
-    - `## §8 Verify before you build` — live docs URLs, actually fetched, never from memory
+    - `## §8 Verify before you build` — live docs URLs, actually fetched, never from memory, **and
+      every paper the day teaches**: slug, title, identifier, and the date it was read
     - `## §9 Say it in an interview` — one paragraph, spoken voice
     - `## §10 Done when` — pointer to `CHECKLIST.md`, defined by understanding and green checks
     - `## §11 Ledger & commit` — the verbatim `PROGRESS.md` row, any `PACKAGES.md`, `INCIDENTS.md`
@@ -161,19 +192,19 @@ argument-hint: [day-number]
 
 ## Step 6 — the checklist (`days/day-NNN-<slug>/CHECKLIST.md`)
 
-26. Demo command, setup boxes, **one box per part document** (read it, run its check-yourself, answer
+29. Demo command, setup boxes, **one box per part document** (read it, run its check-yourself, answer
     its out-loud question), build-brief boxes, a test box per test **including at least one "break
     it, watch it go red, fix it"**, the cost budget, the ledger rows pasted, and the commit box. No
     time estimates.
-27. On a day that broke something, add the box: **"row appended to `docs/INCIDENTS.md`, with the
+30. On a day that broke something, add the box: **"row appended to `docs/INCIDENTS.md`, with the
     first symptom written down before the cause"**.
 
 ## Step 7 — verify
 
-28. Run `./o depth $ARGUMENTS`. **Fix every failure; never hand-wave past one.**
-29. Run `./o trace` — the day's IDs must match §14 exactly, no more and no fewer.
-30. Run `./o tracker`.
-31. Finish by printing: today's IDs, the part count, the demo command, the cost budget, the profile
+31. Run `./o depth $ARGUMENTS`. **Fix every failure; never hand-wave past one.**
+32. Run `./o trace` — the day's IDs must match §14 exactly, no more and no fewer.
+33. Run `./o tracker`.
+34. Finish by printing: today's IDs, the part count, the demo command, the cost budget, the profile
     the day needs, and the official documentation pages you actually fetched.
 
 ---
@@ -188,6 +219,9 @@ argument-hint: [day-number]
   `databricks` and `sagemaker` appear only as 🅿️ parked reading, marked on or immediately above the
   fence. `./o depth` fails the day otherwise.
 - **Never assume everything is running.** State the profile and what to stop (Addendum 02 §4).
+- **Never invent a citation.** A paper is opened and dated, or `TODO`'d with the exact lookup URL.
+  It is cited by title, year and identifier — never by author name — and it is taught in a part of
+  its own with a demo that runs (§17.4.2), never as a footnote.
 - Never name a person, instructor, author, channel, academy, bootcamp or training company anywhere
   in the output. The plan is self-contained and cites no external course. Tool and library names are
   required and fine, as is citing a specification by its revision date.

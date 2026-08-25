@@ -6,7 +6,7 @@ title: "pulse v0"
 ids: [FND-04]
 principles: [1, 2, 4, 7, 8, 10, 11, 13, 16, 17, 18]
 kind: lab
-plan_version: "v1.0.0"
+plan_version: "v1.1.0"
 parts: 14
 generated: "2026-08-24"
 status: written
