@@ -19,9 +19,9 @@ commit: "pending"
 > **Yesterday (Day 0):** one tool owns the environment, the repository cannot leak a key by accident,
 > and `./o` exists with two gates — one that reports health and one that refuses to finish a
 > half-done day. Every one of them was made to fail on purpose before being trusted.
-> **Today:** what the word *operations* actually names — the four questions an operator has to be able
+> **Today:** what the word *operations* actually names. The four questions an operator has to be able
 > to answer about a running system, why failure is the normal state rather than the exception, and why
-> this repository, not any conversation, is where the answers have to live.
+> this repository, rather than any conversation, is where the answers have to live.
 > **Tomorrow (Day 2):** the shape of a production system — the request path, the dependencies, the
 > state and the blast-radius map you draw for `pulse` before a single line of it exists.
 
@@ -30,40 +30,45 @@ commit: "pending"
 ## §1 Where we are
 
 Yesterday built a floor. Today is about what gets built on it, and it starts with a question that
-sounds too simple to spend a day on: *what is operations?*
+sounds too simple to spend a day on. What is operations?
 
-Here is the honest version. Imagine you write something small and useful — a script that reads a list
-of support tickets and sorts them by urgency. On your own machine it is finished. It runs, you read
-the output, you are the only person who could possibly be disappointed by it.
+Here is the honest version. You make yourself a sandwich for lunch every day, and it is a good
+sandwich. Then a colleague asks for one, and then another colleague, and by the end of the month you
+are making six. Nothing about the sandwich has changed. A whole set of new facts has come into
+existence all at once, though, and not one of them is a fact about the sandwich.
 
-Now other people start using it. Nothing about the program changed. But a whole set of new facts came
-into existence, all at once, and none of them are facts about the code:
+Somebody other than you now finds out when there is a problem, and they find out at lunchtime when it
+is too late. The bread runs out. You are off sick and nobody knows until they walk to the kitchen. You
+change the mayonnaise and two people quietly stop asking, and you never learn why.
 
-It runs when you are asleep, so somebody other than you finds out when it stops. It runs against
-inputs you did not choose. It runs next to other programs competing for the same memory. And when it
-is wrong, the cost lands on somebody else's morning rather than on your afternoon.
+Swap the sandwich for a program and every one of those sentences still holds. It runs when you are
+asleep, so somebody else finds out when it stops. It runs against inputs you did not choose. It runs
+next to other programs competing for the same memory. And when it is wrong, the cost lands on somebody
+else's morning rather than on your afternoon.
 
 **Everything in the next two hundred and thirty-six days is a response to that paragraph.** Health
-checks exist because you are asleep. Timeouts exist because things compete. Validation exists because
-inputs surprise you. Rollbacks exist because being wrong is expensive for other people.
+checks exist because you are asleep. Timeouts exist because things compete for the same machine.
+Validation exists because inputs surprise you. Rollbacks exist because being wrong is expensive for
+other people.
 
-There is a useful analogy and it is worth taking seriously, because it explains the *shape* of the
-job rather than just its content. A restaurant kitchen and a home kitchen contain the same equipment
-and produce the same food. What separates them is not skill at cooking. It is that a restaurant has
-to produce a consistent result, at volume, at an unpredictable rate, with staff who change, when the
-supplier sends the wrong delivery — and that is why professional kitchens have checklists, station
-prep, temperature logs and a person whose whole job is calling out what happens next. None of that is
-about food. All of it is about *repeatability under conditions you do not control*.
+There is one more comparison worth taking seriously, because it explains the *shape* of the job rather
+than its content. A restaurant kitchen and a home kitchen hold the same equipment and produce the same
+food. What separates them is not skill at cooking. It is that a restaurant has to produce a consistent
+result, at volume, at an unpredictable rate, with staff who change, on the day the supplier sends the
+wrong delivery. That is why professional kitchens have checklists, prepared stations, temperature logs
+and somebody whose whole job is calling out what happens next. None of that is about food. All of it
+is about repeating a result under conditions you do not control.
 
-Operations is the same discipline, for software. And like a kitchen, the memory has to live in the
-room rather than in a person: the recipe on the wall, the log by the fridge, the note explaining why
-this oven runs hot. **That is the second half of today.** A system whose explanations live in a chat
-thread or in your head has, for operational purposes, not recorded them at all — because the question
-gets asked at 3am, by somebody else, from a file.
+Operations is the same discipline, applied to software. And as in a kitchen, the memory has to live in
+the room rather than in a person: the recipe on the wall, the log by the fridge, the note explaining
+why this oven runs hot. **That is the second half of today.** A system whose explanations live in a
+chat thread or in somebody's head has, as far as operations is concerned, not recorded them at all,
+because the question gets asked at 3am, by somebody else, from a file.
 
-So today gives you two things and then joins them. Four questions an operator must be able to answer.
-Four ledgers where the answers live. And one test — *could a competent stranger operate this from the
-repository alone?* — which is the exam Day 231 sets and which you begin passing or failing today.
+So today gives you two things and then joins them. There are four questions an operator has to be able
+to answer, and four ledgers where the answers live. Then there is one test, *could a competent stranger
+operate this from the repository alone?*, which is the exam Day 231 sets and which you begin passing
+or failing today.
 
 ---
 
@@ -245,8 +250,9 @@ running, and from Day 21 there is a container runtime that never fully goes away
   `pending` forever passes every gate in this repository and is useless on Day 107, when you need it
   to say which commit produced a result.
 - **Reading "the five kinds of ops" as five toolchains.** They are the same four questions with a
-  wider change surface. Treating them as separate is exactly the hospital-department failure in
-  [1.5](parts/01-what-ops-is/1.5-the-five-kinds-of-ops-are-one-job.md).
+  wider change surface. Treating them as separate is exactly the damp-patch failure in
+  [1.5](parts/01-what-ops-is/1.5-the-five-kinds-of-ops-are-one-job.md), where three tradespeople each
+  correctly declare their own part sound and nobody looks at the join.
 - **Pasting a secret into an incident row.** Incident output routinely contains tokens and connection
   strings, `docs/INCIDENTS.md` is deliberately tracked, and `.gitignore` matches paths and never
   content — that is row 9 of the ledger. Redact before you paste; the CI scanner is Day 17.

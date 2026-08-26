@@ -33,11 +33,11 @@ Two days of drawing. Today something runs.
 
 It is worth being clear about how little it does, because the smallness is the design. `pulse` v0
 answers three questions and nothing else: *are you alive?*, *what are you?*, and *here is a support
-ticket, what do you make of it?* — and the answer to the third is a fixed stub, because there is no
-model until Day 109.
+ticket, what do you make of it?* The answer to the third is a fixed stub, because there is no model
+until Day 109.
 
-That sounds like a toy and it is not, for the same reason a flying lesson that spends its first hour on
-taxiing is not a waste. The next hundred days do things *to* this service: they put it in a container,
+That sounds like a toy and it is not, for the same reason a first driving lesson spent entirely in an
+empty car park is not a waste. The next hundred days do things *to* this service. They put it in a container,
 onto a cluster, behind an ingress, through a pipeline, under a load test, into a canary, behind an
 objective. Every one of those days needs something to operate. If that something is complicated, each
 day is partly about the complication. If it is three routes, each day is entirely about the subject.
@@ -45,10 +45,10 @@ day is partly about the complication. If it is three routes, each day is entirel
 So today builds the smallest thing that is genuinely a service, and then spends most of its effort on
 the parts that are not the code:
 
-**What the pieces actually are.** A web framework is two programs, not one — a server that owns the
-socket and speaks HTTP, and an application that owns the routing and speaks Python. Knowing where that
-boundary is decides which program you look at when something fails, and today four of the five errors
-you produce are on one side or the other.
+**What the pieces actually are.** A web framework is two programs rather than one: a server that owns
+the socket and speaks HTTP, and an application that owns the routing and speaks Python. Knowing where
+that boundary sits decides which program you look at when something fails, and today four of the five
+errors you produce are on one side or the other.
 
 **What is being decided permanently.** The model is an implementation detail; the *contract* is not.
 What a client must send, what it gets back, and how it is refused — those three outlive every version
@@ -403,7 +403,7 @@ stayed green:
 | 16 | 2026-08-24 | 3 | Ran the 5.2 drill: a route that raises 503 while /healthz still answers | `healthz -> 200` and `HTTP/1.1 503 Service Unavailable` from the same process in the same second | Not a bug. Liveness answers "can this process respond?", and it can. Nothing would restart, nothing would alert, and every user is stuck | deleted the temporary route, verified with `git diff` | Nothing yet. Readiness is Day 41 and the user-outcome SLO is Day 73 — and only the second would have caught this |
 ```
 
-**`docs/DECISIONS.md`** — no new rows. ADR-0005 from Day 2 already records why `/healthz` checks only
+**`docs/DECISIONS.md`** — no new rows. ADR-0007 from Day 2 already records why `/healthz` checks only
 the process, and today is the code that follows from it. **Re-read it before writing
 [2.2](parts/02-the-service/2.2-healthz-the-endpoint-that-must-not-lie.md).**
 
@@ -413,7 +413,7 @@ the process, and today is the code that follows from it. **Re-read it before wri
 day 003: pulse v0 — closes FND-04
 
 The first running service: three routes, three pinned packages, four
-tests. /healthz answers only that the process can respond (ADR-0005),
+tests. /healthz answers only that the process can respond (ADR-0007),
 /version reports what is actually running from a single definition, and
 /predict fixes the request and response contract before there is a model
 to fill it — including the model_version field Day 111's canary needs.

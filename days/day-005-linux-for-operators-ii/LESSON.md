@@ -28,28 +28,28 @@ commit: "pending"
 ## §1 Where we are
 
 Yesterday's subject was a thing that runs. Today's is a thing that persists, and the two have opposite
-failure modes: a process that stops tells you loudly, and a filesystem that is going wrong tells you
+failure modes. A process that stops tells you loudly, and a filesystem that is going wrong tells you
 nothing at all until it is too late to act gently.
 
 Start with the plainest possible version. Imagine a warehouse with numbered bays and a book of names at
 the front desk. The book says *"kitchen order — bay 4471"*. The pallet is in the bay; the line in the book
 is just a label pointing at it. Two labels can point at the same bay. Crossing a label out does not empty
-the bay — and if somebody is still working in there, the bay stays occupied no matter what the book says.
+the bay, and if somebody is still working in there, the bay stays occupied no matter what the book says.
 
-That is a filesystem. The bay is the file; the line in the book is its name. Almost everything surprising
-today follows from keeping them apart: deleting a name is not deleting a file, so a "deleted" thirty
-gigabyte log can keep filling your disk with nothing to show for it. Renaming a file is invisible to
+That is a filesystem. The bay is the file, and the line in the book is its name. Almost everything
+surprising today follows from keeping the two apart. Deleting a name is not deleting a file, so a
+"deleted" thirty gigabyte log can keep filling your disk with nothing to show for it. Renaming a file is invisible to
 whoever is writing into it, so the tidy rotation that runs every night can quietly divert your logs into a
 file it is about to destroy.
 
 The second half of the day is about who is allowed to do any of this, and the answer is less intuitive
 than it looks. Permission to change a file's *contents* and permission to *delete* it are held in two
-different places — the file and the directory — so making a config file read-only protects it from being
-edited and not at all from being replaced.
+different places, which are the file and the directory, so making a config file read-only protects it
+from being edited and not at all from being replaced.
 
 And then the arithmetic that ties it together. A log line is two hundred bytes, which feels free. A
 thousand requests a second, five lines each, is eighty-six gigabytes a day. Nothing in that sentence is a
-mistake; it is multiplication, and multiplication is where capacity incidents come from.
+mistake. It is multiplication, and multiplication is where capacity incidents come from.
 
 The day ends with a failure that requires all four sections at once: a disk that fills while the log
 directory is empty, every log file is zero bytes, and the rotation job reports success every single night.

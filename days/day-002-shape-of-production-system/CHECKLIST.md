@@ -59,14 +59,14 @@ everything it honestly admits it does not know.
 - [ ] **4.2** the detection gaps counted, and left as gaps rather than filled in optimistically
 - [ ] **4.3** read · `lab/check_architecture.sh` written and made executable · answered out loud: *what does a green result here entitle you to believe, and what does it not?*
 - [ ] **4.4** read · the document's header written — who it is for, what it is not, what the check does not cover · answered out loud: *name the four places knowledge can live here, and what decides which*
-- [ ] **4.4** `ADR-0005` written in your own words, with a **genuine advantage** given for the rejected option
+- [ ] **4.4** `ADR-0007` written in your own words, with a **genuine advantage** given for the rejected option
 
 ---
 
 ## Build brief
 
 - [ ] `docs/ARCHITECTURE.md` exists with all four sections and a header
-- [ ] `docs/adr/ADR-0005-healthz-checks-the-process-only.md` written, with an expiry condition naming Day 41
+- [ ] `docs/adr/ADR-0007-healthz-checks-the-process-only.md` written, with an expiry condition naming Day 41
 - [ ] `lab/check_architecture.sh` · `lab/budget.py` · `lab/slow_dependency.py` · `lab/stateful.py` all written by hand and run
 - [ ] `TODO(me)` — the fourth blast-radius column added: *what if it is slow rather than down?*, filled in for `DB`, `INDEX` and `LLM`
 - [ ] `TODO(me)` — the `LLM` row left honestly `hard`, with the sentence that would let Day 129 change it
@@ -90,7 +90,7 @@ everything it honestly admits it does not know.
 - [ ] the `Commit` column filled in with the real short hash (not left as `pending`)
 - [ ] `docs/PACKAGES.md` — the `curl` row and the Windows port-reuse row appended
 - [ ] `docs/INCIDENTS.md` — **at least two rows**, the false positive and the deliberate break, each with the *first symptom* written before the cause was known
-- [ ] `docs/DECISIONS.md` — the ADR-0005 row appended
+- [ ] `docs/DECISIONS.md` — the ADR-0007 row appended
 - [ ] every server started today confirmed stopped, with `netstat` rather than by assumption
 
 ---

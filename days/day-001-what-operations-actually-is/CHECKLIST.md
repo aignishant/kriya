@@ -24,7 +24,7 @@ symptom-first — which is the artifact a stranger inherits.
 
 ## Section 1 — `01-what-ops-is`
 
-- [ ] **1.1** read · ran `./o next` · answered out loud: *name the five questions, and say which one the ticket-sorting program failed first*
+- [ ] **1.1** read · ran `./o next` · answered out loud: *name the five questions, and say which one the sandwich arrangement failed first*
 - [ ] **1.2** read · ran `./o check` twice · answered out loud: *what does the low-battery chirp buy you, in this part's vocabulary?*
 - [ ] **1.3** read · ran `git log --oneline -5 && time ./o check` · answered out loud: *why is "what changed?" asked last?*
 - [ ] **1.4** read · wrote and ran `lab/availability.py` · answered out loud: *which term of the formula does a rehearsed rollback move?*

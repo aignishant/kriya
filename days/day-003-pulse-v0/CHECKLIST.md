@@ -39,7 +39,7 @@ will still be true on Day 236.
 ## Section 2 — `02-the-service`
 
 - [ ] **2.1** read · `pulse/__init__.py` and the application object written · routing table printed · answered out loud: *two causes of a `404` on a route you can see, and the one command that distinguishes them*
-- [ ] **2.2** read · `/healthz` written with **no dependency call** · ADR-0005 re-read · answered out loud: *the five steps from "the database is slow" to "the whole service is gone"*
+- [ ] **2.2** read · `/healthz` written with **no dependency call** · ADR-0007 re-read · answered out loud: *the five steps from "the database is slow" to "the whole service is gone"*
 - [ ] **2.3** read · `/version` written, reading `__version__` rather than a literal · answered out loud: *three reasons an edit might not appear to take effect, and which is specific to this machine*
 - [ ] **2.4** read · `Ticket`, `Prediction` and `/predict` written · answered out loud: *what real work does `/predict` do with no model?*
 - [ ] **2.4** all three refusal shapes produced by hand: a missing field, an empty `subject`, and malformed JSON — and the `type`/`loc`/`ctx` parts read rather than the prose
@@ -107,7 +107,7 @@ will still be true on Day 236.
 - [ ] the `Commit` column filled in with the real short hash (not left as `pending`)
 - [ ] `docs/PACKAGES.md` — three package rows plus your machine's memory and startup figures
 - [ ] `docs/INCIDENTS.md` — **at least two rows**: the green-gate breakage and the honest health check, each with the *first symptom* written before the cause was known
-- [ ] `docs/DECISIONS.md` — confirmed no new ADR is needed; ADR-0005 already covers `/healthz`
+- [ ] `docs/DECISIONS.md` — confirmed no new ADR is needed; ADR-0007 already covers `/healthz`
 - [ ] every server started today confirmed stopped, with `netstat` rather than by assumption
 
 ---

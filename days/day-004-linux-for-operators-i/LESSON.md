@@ -32,29 +32,29 @@ Yesterday you typed a command and something started answering on port 8000. Toda
 that started.
 
 Here is the shape of the problem, without any jargon. There is a recipe card in a drawer and there is a
-meal being cooked. They are related — the meal came from the card — and they are completely different
-objects. You can edit the card while the meal cooks and nothing on the stove changes. You can burn the
+meal being cooked. They are related, because the meal came from the card, and they are completely
+different objects. You can edit the card while the meal cooks and nothing on the stove changes. You can burn the
 meal without the card being wrong. Almost every confusing conversation about a running system is one
 person talking about the card while the other talks about the stove.
 
 The card is your code. The meal is a **process**, and it is the only thing any operational verb ever
 acts on. Restart, kill, scale, limit memory, drain, replace — all of them are about the meal, never the
-card. This sounds obvious and it is not: the single most common false diagnosis in operations is *"I
-deployed the fix and the bug is still there"*, which is nearly always *"the fix is not running"* — an
-instance that was never replaced, cooking from yesterday's card.
+card. This sounds obvious and it is not. The single most common false diagnosis in operations is *"I
+deployed the fix and the bug is still there"*, which is nearly always *"the fix is not running"*,
+meaning an instance that was never replaced, cooking from yesterday's card.
 
 Once you can see the process as a thing in its own right, three questions become askable, and the day is
 built out of them.
 
 **How do you talk to it?** You cannot call a function in a running process from outside. What you have
-is a doorbell with about thirty buttons and no message field — a **signal**. `Ctrl-C` is one of the
-buttons. So is the thing your container runtime presses when it wants your service to stop, and so is
+is a doorbell with about thirty buttons and no message field, which is called a **signal**. `Ctrl-C` is
+one of the buttons. So is the thing your container runtime presses when it wants your service to stop, and so is
 the thing the kernel presses when the machine is out of memory. The whole art of stopping a service
 without dropping work is: which button, who is allowed to press it, what your program does when it
 rings, and the fact that exactly two of the buttons cannot be answered at all.
 
-**What does it say on the way out?** One number, between 0 and 255. Not a message, not a log line — one
-number, handed only to whoever started it. Every automated decision about whether something worked is
+**What does it say on the way out?** One number, between 0 and 255. Not a message and not a log line,
+but one number, handed only to whoever started it. Every automated decision about whether something worked is
 made from that number and from nothing else. Your CI pipeline reads it. Your container's restart policy
 reads it. `./o check` has been reading it since Day 0 and you have never looked at how.
 

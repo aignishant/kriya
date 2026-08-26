@@ -30,15 +30,15 @@ commit: "pending"
 
 ## §1 Where we are
 
-There is a moment in any building project that costs almost nothing and decides almost everything:
-the moment somebody draws the plan. Not the pretty elevation for the client — the boring one, with
-the drains on it.
+There is a moment in any building job that costs almost nothing and decides almost everything, and it
+is the moment somebody draws the plan. Not the pretty picture for the client, but the boring drawing
+with the drains on it.
 
-The drawing is cheap because nothing has been built. Moving a wall on paper takes a minute. The same
-wall, once the plumbing runs through it, takes a week and three arguments. And the reason to draw the
-drains rather than the elevation is that drains are where the expensive surprises live: the sink can
-go anywhere, but the sink two rooms from the drain will block twice a year forever, and you will only
-notice that by looking at the *connections* rather than at the rooms.
+The drawing is cheap because nothing has been built yet. Moving a wall on paper takes a minute. The
+same wall, once the plumbing runs through it, takes a week and three arguments. And the reason to draw
+the drains rather than the pretty picture is that the drains are where the expensive surprises live.
+The sink can go anywhere, but a sink two rooms away from the drain will block twice a year forever,
+and you only notice that by looking at the *connections* rather than at the rooms.
 
 `pulse` does not exist. Nothing has been built. This is the drains drawing.
 
@@ -65,11 +65,10 @@ user tells us*. Writing that down honestly is the deliverable — those six rows
 for Phase 8, arrived at by reasoning about failure rather than by alerting on whatever the tooling
 happens to expose.
 
-Then you do the thing that makes it real rather than decorative: **you give the document a check, and
-you make the check go red.** A fire evacuation plan in a frame, pointing at a door that was bricked up
-two years ago, is worse than no plan — because people follow it. A diagram nothing can contradict will
-eventually contradict reality, quietly, and the only defence is a command that compares two things and
-exits non-zero.
+Then you do the thing that makes it real rather than decorative. **You give the document a check, and
+you make the check go red.** A map that sends you down a road closed eight months ago is worse than no
+map, because people follow it. A diagram that nothing can contradict will eventually contradict
+reality, quietly, and the only defence is a command that compares two things and exits non-zero.
 
 Nothing today runs in production. Everything today is a decision that is free to make now and
 expensive to make later.
@@ -177,7 +176,7 @@ with four sections, one shell check, three scratch scripts and one ADR.**
 | `docs/ARCHITECTURE.md` §3 | [3.2](parts/03-state/3.2-where-pulse-state-will-live.md), [3.3](parts/03-state/3.3-what-you-can-lose-and-what-you-cannot.md) | **Yours to write** — state placement, then RPO, RTO and `last tested` |
 | `docs/ARCHITECTURE.md` §4 | [4.2](parts/04-blast-radius/4.2-drawing-the-blast-radius-map.md) | **Yours to write** — twelve rows, including four with no box on the diagram |
 | `docs/ARCHITECTURE.md` header | [4.4](parts/04-blast-radius/4.4-the-architecture-document-that-survives-you.md) | **Yours to write** — who it is for, what it is not, what the check does not cover |
-| `docs/adr/ADR-0005-healthz-checks-the-process-only.md` | [4.4](parts/04-blast-radius/4.4-the-architecture-document-that-survives-you.md) | **Yours to write** — plus its row in `docs/DECISIONS.md` |
+| `docs/adr/ADR-0007-healthz-checks-the-process-only.md` | [4.4](parts/04-blast-radius/4.4-the-architecture-document-that-survives-you.md) | **Yours to write** — plus its row in `docs/DECISIONS.md` |
 | `lab/check_architecture.sh` | [4.3](parts/04-blast-radius/4.3-the-map-is-wrong.md) | **Yours to write** — the check that can go red |
 | `lab/budget.py` | [1.3](parts/01-the-request-path/1.3-latency-adds-up-along-the-path.md) | **Yours to write** — the latency budget, and what halving each hop buys |
 | `lab/slow_dependency.py` | [2.3](parts/02-dependencies/2.3-the-dependency-that-fails-slowly.md) | **Yours to write** — one slow route, one fast one, one shared pool |
@@ -193,7 +192,7 @@ with four sections, one shell check, three scratch scripts and one ADR.**
 - `TODO(me)` Add a **fourth column** to the blast-radius map that today's parts do not give you:
   *what if it is slow rather than down?* Fill it in for `DB`, `INDEX` and `LLM`. Two of the three
   answers will be worse than the "down" answer.
-- `TODO(me)` Write `ADR-0005` from [4.4](parts/04-blast-radius/4.4-the-architecture-document-that-survives-you.md)
+- `TODO(me)` Write `ADR-0007` from [4.4](parts/04-blast-radius/4.4-the-architecture-document-that-survives-you.md)
   in your own words, including a genuine advantage for the option you rejected. If you cannot think of
   one, you have not understood the option yet.
 - `TODO(me)` Break `lab/check_architecture.sh` in a *second* way that is not the `CACHE` example —
@@ -282,7 +281,7 @@ leave running.
   ([2.3](parts/02-dependencies/2.3-the-dependency-that-fails-slowly.md)).
 - **Making `/healthz` check the database.** It converts a database outage into a total outage, because
   every instance answers unhealthy at once and none recovers
-  ([3.2](parts/03-state/3.2-where-pulse-state-will-live.md), ADR-0005).
+  ([3.2](parts/03-state/3.2-where-pulse-state-will-live.md), ADR-0007).
 - **Filling every cell in the blast-radius map.** Six rows should say *nobody* or *a user tells us*
   today. A map with no gaps on a system with no alerts is a map that is lying
   ([4.2](parts/04-blast-radius/4.2-drawing-the-blast-radius-map.md)).
@@ -391,7 +390,7 @@ you knew the cause:
 **`docs/DECISIONS.md`** — **one new row**, for the ADR you write today:
 
 ```text
-| [ADR-0005](adr/ADR-0005-healthz-checks-the-process-only.md) | 2026-08-24 | accepted | `/healthz` reports only that the process can respond; dependency status gets a separate endpoint when a supervisor exists to consume it (Day 41). |
+| [ADR-0007](adr/ADR-0007-healthz-checks-the-process-only.md) | 2026-08-24 | accepted | `/healthz` reports only that the process can respond; dependency status gets a separate endpoint when a supervisor exists to consume it (Day 41). |
 ```
 
 **Commit message:**
