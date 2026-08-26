@@ -1,9 +1,14 @@
 # ADR-0005 — Research is taught as a part of its own, never as a citation
 
+> **⚠️ Superseded by [ADR-0006](ADR-0006-no-papers.md) on 2026-08-26.** The `papers/` folder, the
+> `papers:` frontmatter key and every paper document have been removed from the curriculum. This
+> record is kept because the reasoning below was sound and the outcome was still wrong; ADR-0006
+> says why.
+
 - **Date:** 2026-08-25
 - **Day:** 11 (amendment; applied retroactively to Days 0–11)
 - **Phase:** 2
-- **Status:** accepted
+- **Status:** superseded by ADR-0006 (2026-08-26) — the curriculum teaches no papers
 - **Related:** ADR-0002 (depth contract)
 - **Implements:** master plan §17.4.2, Principles 7, 8, 16 and 18
 

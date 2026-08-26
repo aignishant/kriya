@@ -6,7 +6,7 @@ title: "Networking for operators"
 ids: [FND-08, FND-09]
 principles: [1, 2, 4, 7, 8, 10, 11, 12, 13, 15, 16, 17, 18]
 kind: lab
-plan_version: "v1.1.0"
+plan_version: "v1.2.0"
 parts: 17
 generated: "2026-08-24"
 status: written
@@ -118,14 +118,6 @@ can least carry it, and the drill that takes `pulse` down without producing a si
 | 5.1 | [The timeout budget down the request path](parts/05-the-two-together/5.1-the-timeout-budget-down-the-request-path.md) | which service in a five-hop path should have the smallest timeout? | production |
 | 5.2 | [Retries that turn a blip into an outage](parts/05-the-two-together/5.2-retries-that-turn-a-blip-into-an-outage.md) | three layers, three attempts each — is that nine requests or twenty-seven? | production |
 | 5.3 | [Hanging `pulse` on purpose](parts/05-the-two-together/5.3-hanging-pulse-on-purpose.md) | how many slow requests separate a healthy service from no service at all? | production |
-
-**📄 The research — `papers/`.** The retry ladder 5.2 builds is not a convention somebody picked;
-it is a published result, and this curriculum teaches a paper the way it teaches everything else — in
-a document of its own, with a demo you run (plan §17.4.2). Read it after section 5.
-
-| Paper | What it settles | Level |
-| --- | --- | --- |
-| [Congestion Avoidance and Control](papers/congestion-avoidance-and-control.md) (1988) | why the wait *doubles* rather than growing by a constant — and what the paper never said about jitter | production |
 
 ---
 
@@ -404,13 +396,6 @@ Fetched on **2026-08-24**, not recalled:
 | `rfc-editor.org/rfc/rfc9110` §9.2.2, §10.2.3 | the definitions of *idempotent* and of `Retry-After`, including the ABNF — quoted verbatim in 5.2 |
 | `sre.google/sre-book/addressing-cascading-failures/` | retry amplification as a *product*, the retry budget, and *"always use randomized exponential backoff"* — quoted verbatim in 5.2 |
 | Day 4's and Day 6's fetched pages | exit codes, process states, and `time.monotonic()` |
-
-**📄 The paper this day teaches**, read in full on **2026-08-25** and taught in
-[`papers/congestion-avoidance-and-control.md`](papers/congestion-avoidance-and-control.md):
-
-| Slug | Title | Identifier | Read |
-| --- | --- | --- | --- |
-| `congestion-avoidance-and-control` | *Congestion Avoidance and Control* | Proceedings of ACM SIGCOMM 1988; copy at `https://ee.lbl.gov/papers/congavoid.pdf` | 2026-08-25 |
 
 ⚠️ **Two things in this day are environment-dependent and are flagged where they appear.** The AnyIO
 limiter of 40 is a **default**, so 5.3's first step reads it live rather than trusting the number — if

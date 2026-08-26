@@ -6,7 +6,7 @@ title: "Toolchain, skeleton and the ./o driver"
 ids: []
 principles: [1, 2, 7, 9, 10, 11, 13, 15, 16, 17, 18]
 kind: setup
-plan_version: "v1.1.0"
+plan_version: "v1.2.0"
 parts: 19
 generated: "2026-08-24"
 status: complete

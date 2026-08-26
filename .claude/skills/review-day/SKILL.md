@@ -33,8 +33,10 @@ For each one, either say **"clear"** or quote the exact passage that fails it. N
 | 6 | **A capability without a bound** | Does every part that introduces a write path, an autoscaler, a remediation, a tool or an agent action name its blast radius: worst case, who can trigger it, what bounds it? (§17.4.1 rule 3) |
 | 7 | **Trimming to fit** | Is there a place where the explanation obviously stops early — a "we won't go into that here" with no forward link, a mechanism section shorter than its story? |
 | 8 | **Solved reps** | Is every `TODO(me)` still unsolved? Did the document quietly do the learner's exercise for them? |
-| 9 | **A citation instead of an explanation** | Is any paper named in passing rather than taught in a `papers/` document (§17.4.2)? `papers: []` is **not** a finding — papers are written on request, not generated. |
-| 10 | **The claim the paper never made** | *(Only if the day has a `papers/` folder.)* Does every paper document's *What it did not claim* name a real over-reading, with what the paper actually bounded its result to — or is it a hedge ("results may vary")? |
+| 9 | **A citation** | Does any part name a paper, carry a `papers:`, `paper:` or `kind: paper` key, or sit beside a `papers/` folder? All of these were removed by ADR-0006. Provenance belongs in ordinary words, in the part that uses the idea. |
+| 10 | **The sentence built out of clauses** | Read every part's first three paragraphs aloud. Count fragments with no verb, and dashes used where a comma or a full stop belongs. Quote the worst three and rewrite them. (§18.1 rule 6) |
+| 11 | **The word that shows off** | Is there a longer word where an everyday one means the same thing, or a technical term used before it is defined? (§18.1 rule 7) |
+| 12 | **A story nobody has lived** | Is every *The story* scene one the reader has plausibly been inside — a kitchen, a queue, a phone call — rather than a trade whose vocabulary is itself the obstacle, or one that only works in one country? Does it need explaining before it can illustrate anything? (§18.1 rule 8) |
 
 ## Step 3 — the three tests, per part
 
@@ -46,25 +48,6 @@ For each one, either say **"clear"** or quote the exact passage that fails it. N
   worry about". Each one must link forward to a specific part. A deferred explanation must have an
   address.
 
-## Step 3b — the `papers/` documents (§17.4.2)
-
-**Skip this entirely unless the day has a `papers/` folder.** Papers are written deliberately and on
-request, never generated (§17.4.2), so `papers: []` everywhere is the expected state of a generated
-day and is not a finding.
-
-- **The citation.** Title verbatim, year, venue or arXiv ID, a link that is free to read, and the
-  date it was read. **Open the link.** A citation nobody opened is the easiest defect in this
-  curriculum to ship and the most embarrassing to have shipped. Cited by title — never `et al.`
-- **The demo.** Is it a *small end-to-end project implementing only the paper's feature*, or a
-  fragment? Does it run — files, command, and **real** output pasted? Does it show the behaviour
-  without the paper's mechanism as well as with it? Would a reader with no prior knowledge get the
-  same output?
-- **The numbers.** Does the mechanism section quote what the paper actually reported, or adjectives?
-- **The half that never left the lab.** Does *In production* say which part of the result is inside
-  the tool you run today and which part is not?
-- **Explained once.** Does any part re-explain a paper an earlier day already taught, instead of
-  declaring the slug and linking it?
-
 ## Step 4 — the ops-specific checks (§17.4.1)
 
 - **Every API, flag and field** used: does the part name the official page checked, with a date?
@@ -75,8 +58,6 @@ day and is not a finding.
 - **Every new signal**: does the part say how you would alert on it, or explicitly that you would
   not and why?
 - **Every cost**: stated in quota units — requests, tokens, RAM, disk, CI minutes?
-- **Every citation** *(only if the day has a `papers/` folder)*: opened, dated, cited by title? Does
-  the hub's §8 name every paper the day teaches?
 - **The machine**: does the hub's §3 say which profile to start **and what to stop first**
   (Addendum 02 §4)? Does the day's resident memory fit alongside what earlier days left running?
 
@@ -99,7 +80,6 @@ Print exactly this shape:
 day NNN — <title>
 depth check:   PASS / FAIL
 parts:         N across M sections, levels: <foundation×a, working×b, production×c>
-papers:        <slug (day it was taught), ...>  or  none (the normal case)
 
 BLOCKING (must fix before this day counts as written)
   - <file>: <what, with the quoted passage>

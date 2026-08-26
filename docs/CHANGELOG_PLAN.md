@@ -159,3 +159,60 @@ up here, it is held to it; what is removed is the instruction to go hunting for 
 day, which is where the invented citation would have come from.
 
 ---
+
+---
+
+## v1.2.0 — 2026-08-26 — papers are removed from the contract, and the day format loses a folder
+
+**What moved.** Not the ecosystem this time, but a reading of the material. The first eleven days
+were read back for tone, and two problems were found in the same pass.
+
+**1. The `papers/` folder is removed entirely.** [ADR-0006](adr/ADR-0006-no-papers.md) supersedes
+ADR-0005. One paper document was written, on Day 7, and reading it against the part it grounded
+showed that it taught the same mechanism a second time, in a second place, in an academic register
+the rest of the curriculum does not use. A feature exercised once should not cost a frontmatter key
+on every part, a slug index across every day, and nine checks in the depth script.
+
+Removed from the plan:
+
+- **§17.2** — the `papers/` entry in the day folder tree, and the paragraph explaining when it is
+  present.
+- **§17.4** — the `papers` key in the frontmatter row, and the `kind: paper` / `paper:` clause.
+- **§17.4.1** — rule 6, *never invent a citation*. The section is back to five rules, which is what
+  its heading always said. Rules 1 and 2 already forbid inventing an API or a version, and they
+  cover every fact a part states.
+- **§17.4.2** — the whole subsection.
+- **§17.5** — the clause in hub §8 requiring every paper to be named.
+- **§17.7** — the `any day citing research` row, and the paragraph forbidding a paper from being
+  squeezed into a part.
+- **§17.8** — *a citation instead of an explanation* and *the claim the paper never made*.
+- **§17.9** — the nine paper checks.
+- **§18.4** — the paper-citation clause in rule 12. *No invented facts* is unchanged and still
+  covers versions, flags, field names, quotas, API signatures and spec revisions.
+
+Deleted from the days: `days/day-007-networking-for-operators/papers/`. What that document taught
+about the retry ladder was already in that day's part 5.2, which is where it stays.
+
+`scripts/depth_check.py` drops every paper check and gains one in their place: a part carrying a
+`papers:`, `paper:` or `kind: paper` key now **fails**, so the removed format cannot return by
+accident in a later day.
+
+**Where research still shows up.** In ordinary words, inside the ordinary part, when and only when
+the provenance changes how an operator behaves — *"this is the retry pattern the internet settled
+on after congestion collapse in the 1980s"*. No title, no year, no identifier, no link, no author.
+Where it does not change behaviour, it is not mentioned at all.
+
+**2. The house style gains three rules on language** (§18.1, rules 6–8; everything after them is renumbered), because the first eleven
+days drifted away from the register Principle 18 asks for:
+
+- **Complete, punctuated sentences.** The clipped fragment and the em-dash used as a general-purpose
+  joint read as speed on the page and as fog to somebody meeting the idea for the first time. Commas
+  and full stops do the work.
+- **The plainest word that is still exact.** Where a shorter everyday word means the same thing, it
+  wins.
+- **Stories anyone can stand inside.** A scene has to be one the reader has plausibly lived: a
+  kitchen, a queue, a phone, a shared flat, a school. Not a trade whose vocabulary is itself the
+  obstacle, and not one that only works in one country.
+
+Applied retroactively to Days 1–11: every story section rewritten, and the language of every other
+section brought to the same standard. Day 0 is unchanged.

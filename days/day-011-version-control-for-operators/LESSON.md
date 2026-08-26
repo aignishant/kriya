@@ -6,7 +6,7 @@ title: "Version control for operators"
 ids: [FND-14]
 principles: [1, 2, 4, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18]
 kind: lab
-plan_version: "v1.1.0"
+plan_version: "v1.2.0"
 parts: 17
 generated: "2026-08-25"
 status: written

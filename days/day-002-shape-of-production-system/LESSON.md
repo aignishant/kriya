@@ -6,7 +6,7 @@ title: "The shape of a production system"
 ids: [FND-03]
 principles: [1, 2, 8, 10, 11, 12, 13, 16, 17, 18]
 kind: concept
-plan_version: "v1.1.0"
+plan_version: "v1.2.0"
 parts: 13
 generated: "2026-08-24"
 status: written

@@ -72,8 +72,6 @@ days/day-NNN-<day-slug>/
 │   │   ├── 1.2-<slug>.md
 │   └── 02-<slug>/
 │       └── 2.1-<slug>.md
-├── papers/        # one document per paper the day rests on (§17.4.2)
-│   └── <paper-slug>.md
 └── lab/           # the learner's own code
 ```
 
@@ -94,24 +92,13 @@ days/day-NNN-<day-slug>/
 - **Every part carries all ten required sections in order**: frontmatter · one-line answer ·
   **the story** · the idea in plain language · **why Kriya needs it** · the mechanism · line by
   line · when it breaks · **in production** · check yourself. See plan §17.4.
-- **Every part declares `papers:`** — the slugs of the papers its idea rests on, or `[]`. **A day you
-  generate declares `[]` everywhere**: papers are written deliberately and on request, never by the
-  day generator (§17.4.2), because a citation is the easiest fact here to fabricate. **Never invent a
-  citation, and never go looking for one to fill the field.**
-- **When a paper *is* written** — on request, never automatically — it is a document of its own
-  (§17.4.2), never a footnote or a reading list:
-  `days/day-NNN-<slug>/papers/<paper-slug>.md` — a **sibling of `parts/`**, named for the paper's slug,
-  carrying `kind: paper`, `paper: <slug>` and no `part:` key, with the ordinary ten sections plus three — **the citation** (title, year, venue or arXiv ID, a free link,
-  and the date you read it) after the one-line answer, **the demo** after the mechanism, and **what
-  it did not claim** after the walkthrough. Cite by title; **never by author name** — `et al.` fails
-  `./o depth`.
-- **The demo is a small end-to-end project implementing only the paper's feature** — fewest files
-  that run, the command, the real output pasted, ideally written twice (without the mechanism, then
-  with it). It is teaching code, written out in full, typed into the day's gitignored `lab/`.
-- **A paper is explained once in the whole curriculum.** A later day declares the slug and links that
-  file; it never re-explains it, and it never copies it into its own `papers/`.
+- **This curriculum cites no papers** (ADR-0006). There is no `papers/` folder, no `papers:`,
+  `paper:` or `kind: paper` key, and no citation in a part. `./o depth` fails a part carrying any of
+  them. Where research changed how an operator behaves, say what it changed in ordinary words, in
+  the part that uses the idea, with no title, no year, no identifier, no link and no author.
 - **The story comes first and carries no jargon** — a concrete scene, a person, a failure, a
-  decision. It is the hook the definition hangs on, not decoration.
+  decision. It is the hook the definition hangs on, not decoration. **See the four story rules under
+  Style below**; a bad story is the defect this curriculum ships most often.
 - **`In production` is not optional.** A part that shows the idea working on one request and never
   says what happens at ten thousand has taught half the subject.
 - **Every part declares a `level`** — `foundation` · `working` · `production` — and a day climbs.
@@ -126,15 +113,13 @@ days/day-NNN-<day-slug>/
   code blocks, a smuggled-in clock, an unmarked billable command, and a hub that carries teaching.
   **Never hand-wave past a `depth` failure.**
 
-### Kriya's six additional part rules (plan §17.4.1)
+### Kriya's five additional part rules (plan §17.4.1)
 
 1. **Never invent an API, a flag or a field** — name the official page checked, inline, with a date.
 2. **Never invent a version** — state the verified version, or a `TODO` with the exact lookup command.
 3. **Name the blast radius** of any new capability: worst case, who can trigger it, what bounds it.
 4. **Say how you would alert on any new signal** — or say explicitly that you would not, and why.
 5. **State the cost in quota units** — requests, tokens, RAM, disk, CI minutes. `0` is an answer.
-6. **Never invent a citation.** A paper is a fact like a version or a flag: opened and dated, or a
-   `TODO` with the exact lookup URL. If it is worth citing it gets a part; if not, it is not cited.
 
 ### Generating a day
 
@@ -208,6 +193,34 @@ actually ran them, not "should pass."
   learning this to operate production systems, so no idea stops at the toy example.
 - **Simple language first.** Plain words → concrete example → *only then* the terminology. If a
   twelve-year-old could not follow the first sentence, rewrite the first sentence.
+
+**The four story rules** (plan §18.1 rule 8). Every part's `The story` is held to these, and a scene
+that fails one is replaced rather than patched:
+
+1. **A scene the reader has been inside** — a kitchen, a queue, a bus, a shared flat, a phone call, a
+   school, a parcel that did not arrive. **Never a trade whose vocabulary is itself the obstacle**: a
+   dispensing bench, a stage-management desk, a building site's chain of command. If the scene needs
+   explaining before it can illustrate anything, it cost more than it gave.
+2. **It works anywhere.** The reader may never have seen a postal sorting office or a village fête.
+   Food, family, money, waiting, lost property, a full phone, a group chat and a bus that did not
+   come all travel. Prefer them.
+3. **It is literally realistic** — something that plausibly happened to somebody last Tuesday, with
+   real quantities in it: *four flatmates and one bathroom*, *ninety photos and a phone that says
+   storage full*. A scene that is really a metaphor in costume teaches the costume.
+4. **Four beats, all of them whole sentences**, and short: 🎬 the scene · 😬 the naive fix · 💥 why it
+   fails · 💡 the insight, in roughly 120–200 words. A story longer than the mechanism it introduces
+   has become the point.
+
+**Two rules for every other section** (plan §18.1 rules 6–7):
+
+- **Whole sentences, properly punctuated.** A fragment with no verb reads as speed to somebody who
+  already knows the subject and as fog to somebody who does not. Use commas and full stops. Keep the
+  em dash for the one aside per paragraph that earns it, and let a colon introduce a list rather than
+  a thought.
+- **The plainest word that is still exact** — *use* over *utilise*, *starts* over *is initiated*,
+  *about* over *approximately*. The rule stops at accuracy: a technical term that means something
+  specific is kept and defined on first use, because replacing it with a vague word is not
+  simplification.
 - **Define every term on first use, including terms from earlier days**, with a link back to the
   part that introduced them. 237 days is long enough that Day 22 is forgotten by Day 190.
 - **EVERY code block is followed by a `**Line by line:**` walkthrough** of each non-obvious token —

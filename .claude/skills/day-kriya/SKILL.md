@@ -57,13 +57,11 @@ argument-hint: [day-number]
 9. **Never invent a model name.** Any day that names a model looks up the provider's current free
    list first (Gemini AI Studio · console.groq.com/settings/limits · openrouter.ai filtered to
    `:free`) and records model + date. Free rosters move.
-10. **Never invent a citation, and never go looking for one.** Every part you write declares
-    `papers: []`, and **this skill does not create a `papers/` folder or a paper document** — that
-    is deliberate (§17.4.2). A plausible title, year and venue cost nothing to emit and are
-    expensive to catch, so research is written up only when I ask for it, by somebody who has read
-    the paper. If a day's mechanism plainly comes from published work and you think it deserves a
-    paper document, **say so at the end and stop there** — do not write one, and do not name the
-    paper in a part.
+10. **Never cite a paper.** This curriculum cites none (§17.4.2, ADR-0006). There is no `papers/`
+    folder, no `papers:` frontmatter key and no `kind: paper` document, and `./o depth` fails a
+    part that carries any of them. Where an idea came from published work and the origin changes
+    how an operator behaves, say what it changed, in ordinary words, in the part that uses it, with
+    no title, no year, no identifier, no link and no author.
 11. **MCP days:** check the specification revision on the spec page before writing. If it moved,
     amend first (Principle 14).
 12. **Cost check.** If the day would tell the reader to run anything billable, it is wrong. Rework
@@ -109,12 +107,13 @@ argument-hint: [day-number]
     `../../LESSON.md`. `prev` and `next` in the frontmatter use the same form. The hub's §2 map links
     the full path from the day folder: `parts/01-<slug>/1.1-<slug>.md`.
 23. Every part carries all ten sections of §17.4, **in this order**:
-    - **frontmatter** — `day`, `part`, `title`, `ids`, `level`, `papers`, `prerequisites`, `prev`,
-      `next`. **`papers` is always `[]` in a generated day** (step 10). **No duration field of any
-      kind.**
+    - **frontmatter** — `day`, `part`, `title`, `ids`, `level`, `prerequisites`, `prev`, `next`.
+      **No duration field of any kind**, and **no `papers:`, `paper:` or `kind: paper` key**
+      (step 10).
     - **One-line answer** — the claim in one sentence, before anything else.
     - **The story** — a concrete scene first: a person, a machine, a failure, a decision. **No jargon
-      at all** in this section. This is the hook the definition hangs on.
+      at all** in this section. This is the hook the definition hangs on. Written to the four story
+      rules below, which are the ones this curriculum gets wrong most often.
     - **The idea in plain language** — the concept assuming zero prior knowledge; every term defined
       on first use, **including terms from earlier days**, with a link to the part that introduced
       them. No code.
@@ -133,17 +132,54 @@ argument-hint: [day-number]
       the interview question that finds out whether you have actually used it. **Not optional. This
       is the section that makes the document professional rather than introductory.**
     - **Check yourself** — one command to run now, one question to answer out loud.
-24. Apply **Kriya's six additional part rules** (§17.4.1): name the official page checked, with a
+24. Apply **Kriya's five additional part rules** (§17.4.1): name the official page checked, with a
     date · state the verified version or a `TODO` with the lookup command · **name the blast radius**
     of any new capability (worst case, who can trigger it, what bounds it) · **say how you would
     alert** on any new signal, or why you would not · **state the cost in quota units** (requests,
-    tokens, RAM, disk, CI minutes; `0` is an answer) · **never invent a citation**.
+    tokens, RAM, disk, CI minutes; `0` is an answer).
 25. Mermaid diagram whenever the concept is spatial, sequential, or a state machine — a request path,
     a rollout, a retry ladder, an incident timeline, an approval gate, a reconciliation loop.
 
+### How to write *The story* (§18.1 rule 8)
+
+The story is the section a reader meets first and the one they remember. Four rules, and a scene that
+fails any of them is the wrong scene — rewrite it rather than patching it.
+
+26. **A scene the reader has been inside.** A kitchen, a queue, a bus, a shared flat, a phone call, a
+    school, a lost set of keys, a parcel that did not arrive. **Not a trade whose vocabulary is
+    itself the obstacle** — not a pharmacy dispensing bench, not a touring theatre's stage
+    management, not a building site's chain of command. If the scene has to be explained before it
+    can illustrate anything, it has cost the reader more than it gave them.
+27. **It has to work anywhere.** Somebody reading this has never seen a British postal sorting
+    office, a locum pharmacist or a village fête. Things that travel: food, family, money, waiting,
+    lost property, a full phone, a shared bathroom, a group chat, a bus that did not come. Prefer
+    them.
+28. **It must be literally realistic.** The scene should be something that plausibly happened to
+    somebody last Tuesday, with real quantities in it — *four flatmates and one bathroom*, *ninety
+    photos and a phone that says storage full*. A scene that is really a metaphor wearing a costume
+    teaches the costume.
+29. **Four beats, and every one of them a whole sentence** (§18.2): 🎬 the scene · 😬 the naive fix ·
+    💥 why it fails · 💡 the insight. Keep it short. Roughly 120–200 words is enough for all four,
+    and a story longer than the mechanism it introduces is a story that has become the point.
+
+### How to write every other section (§18.1 rules 6–7)
+
+30. **Whole sentences, properly punctuated.** A fragment with no verb reads as speed to somebody who
+    already knows the subject and as fog to somebody who does not. Use commas and full stops. Keep
+    the em dash for the one aside per paragraph that earns it — four ideas welded together with
+    dashes is the habit this rule exists to break — and let a colon introduce a list rather than a
+    thought.
+31. **The plainest word that is still exact.** *use* over *utilise*, *starts* over *is initiated*,
+    *find out* over *ascertain*, *about* over *approximately*. The rule stops at accuracy: a
+    technical term that means something specific is kept, and defined on first use. Replacing a
+    precise word with a vague one is not simplification.
+32. **Plain words first, then the term.** Say the thing, give the concrete example, and only then
+    name it. If a twelve-year-old could not follow the first sentence of a section, the first
+    sentence is wrong.
+
 ## Step 5 — write the hub (`days/day-NNN-<slug>/LESSON.md`)
 
-26. The hub orients and assembles; **it never teaches**. No `Line by line:` in the hub. Required
+33. The hub orients and assembles; **it never teaches**. No `Line by line:` in the hub. Required
     sections, in order (§17.5):
     - YAML frontmatter (`day`, `phase`, `phase_name`, `title`, `ids`, `principles`, `kind`,
       `plan_version: "v1.1.0"`, `parts`, `generated`, `status`, `lab_scaffolded`, `commit`)
@@ -160,8 +196,8 @@ argument-hint: [day-number]
     - `## §6 Cost & quota budget` — model calls per provider in RPM/RPD, CI minutes, RAM and disk for
       anything started today (`0` is an answer; state it)
     - `## §7 Traps` — the mistakes that eat an evening, including the named trap from §5.1
-    - `## §8 Verify before you build` — live docs URLs, actually fetched, never from memory. A
-      generated day teaches no paper, so it lists none here
+    - `## §8 Verify before you build` — live docs URLs, actually fetched, never from memory, each
+      with the date it was fetched
     - `## §9 Say it in an interview` — one paragraph, spoken voice
     - `## §10 Done when` — pointer to `CHECKLIST.md`, defined by understanding and green checks
     - `## §11 Ledger & commit` — the verbatim `PROGRESS.md` row, any `PACKAGES.md`, `INCIDENTS.md`
@@ -170,19 +206,19 @@ argument-hint: [day-number]
 
 ## Step 6 — the checklist (`days/day-NNN-<slug>/CHECKLIST.md`)
 
-27. Demo command, setup boxes, **one box per part document** (read it, run its check-yourself, answer
+34. Demo command, setup boxes, **one box per part document** (read it, run its check-yourself, answer
     its out-loud question), build-brief boxes, a test box per test **including at least one "break
     it, watch it go red, fix it"**, the cost budget, the ledger rows pasted, and the commit box. No
     time estimates.
-28. On a day that broke something, add the box: **"row appended to `docs/INCIDENTS.md`, with the
+35. On a day that broke something, add the box: **"row appended to `docs/INCIDENTS.md`, with the
     first symptom written down before the cause"**.
 
 ## Step 7 — verify
 
-29. Run `./o depth $ARGUMENTS`. **Fix every failure; never hand-wave past one.**
-30. Run `./o trace` — the day's IDs must match §14 exactly, no more and no fewer.
-31. Run `./o tracker`.
-32. Finish by printing: today's IDs, the part count, the demo command, the cost budget, the profile
+36. Run `./o depth $ARGUMENTS`. **Fix every failure; never hand-wave past one.**
+37. Run `./o trace` — the day's IDs must match §14 exactly, no more and no fewer.
+38. Run `./o tracker`.
+39. Finish by printing: today's IDs, the part count, the demo command, the cost budget, the profile
     the day needs, and the official documentation pages you actually fetched.
 
 ---
@@ -197,10 +233,13 @@ argument-hint: [day-number]
   `databricks` and `sagemaker` appear only as 🅿️ parked reading, marked on or immediately above the
   fence. `./o depth` fails the day otherwise.
 - **Never assume everything is running.** State the profile and what to stop (Addendum 02 §4).
-- **Never invent a citation, and never write a paper document.** Generated parts declare
-  `papers: []`. The `papers/` contract (§17.4.2) exists for research written up deliberately, on
-  request, by somebody who has read the paper — not for a generator that would eventually cite one
-  that does not exist. Naming a paper inside a part is the same mistake in a smaller box.
+- **Never cite a paper and never create a `papers/` folder.** ADR-0006 removed both from this
+  contract. Naming a paper inside a part is the same mistake in a smaller box.
+- **Never write a story the reader has to decode.** The scene comes from ordinary life, works in
+  any country, and is literally realistic (steps 26–29). A clever analogy that needs its own
+  explanation is a failure, not a flourish.
+- **Never write in fragments.** Whole sentences, commas and full stops, the plainest exact word
+  (steps 30–32). This applies to every section, not only the story.
 - Never name a person, instructor, author, channel, academy, bootcamp or training company anywhere
   in the output. The plan is self-contained and cites no external course. Tool and library names are
   required and fine, as is citing a specification by its revision date.

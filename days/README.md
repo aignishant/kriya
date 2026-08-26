@@ -105,34 +105,6 @@ and `./o depth NNN` fails the day if any of them is missing.
 | **In production** | what changes in a real system: the professional's version, what degrades at scale, the senior reviewer's comment, **the signal you would alert on**, the interviewer's question |
 | **Check yourself** | one command to run now, one question to answer out loud |
 
-### When the idea came from a paper
-
-Some of what this curriculum teaches is folklore that hardened into practice. Some of it is a
-**published result** — exponential backoff, tail latency, the container's resource box — that
-arrived as a paper years before it arrived as a flag in a config file.
-
-**When an idea comes from research, the paper can get a document of its own** (plan §17.4.2), written
-to the same contract as every other part. **It is never automatic** — writing a day produces no
-paper, and every generated part declares `papers: []`; a paper document exists because somebody read
-that paper and chose to write it up. When one is written it carries: its own story, its own mechanism with the numbers the paper
-actually reported, its own failure mode, its own production face. A reading list at the bottom of a
-hub is not teaching, and a citation dropped inline is decoration. If the paper is worth citing, it
-is worth a part; if it is not worth a part, it is not cited.
-
-| | |
-| --- | --- |
-| **Where it sits** | `days/day-NNN-<slug>/papers/<paper-slug>.md` — its own folder beside `parts/`, because a paper is not a subtopic of the day but the source the day rests on |
-| **Frontmatter** | the usual keys minus `part:`, plus `kind: paper` and `paper: <slug>`; `title` is the paper's real title |
-| **The citation** | after the one-line answer: title, year, venue or arXiv ID, a link that is free to read, **and the date you read it** |
-| **The demo** | after the mechanism: a small end-to-end project implementing **only** the paper's feature — fewest files, the command, the real output. Usually written twice: without the idea, then with it. |
-| **What it did not claim** | after the walkthrough: the over-reading the industry did, and what the paper actually bounded its result to |
-| **Cited by title** | never by author name — this curriculum names no people, and `et al.` fails `./o depth` |
-
-Every document — part or paper — declares `papers:` in its frontmatter: the slugs it rests on, or
-`[]`. **`[]` is the default and a real answer.** There is no research behind `chmod`, and a citation
-invented to fill a field is the same failure as an invented flag. A paper is explained
-**once** in the whole curriculum; later days declare its slug and link that file.
-
 ### `level` — where a part leaves you
 
 Every part declares one, and a well-built day climbs through them:

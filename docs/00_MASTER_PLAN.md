@@ -1,6 +1,6 @@
 ---
 plan: kriya
-version: "v1.1.0"
+version: "v1.2.0"
 curricula: 10
 ids: 279
 days: 237
@@ -10,7 +10,7 @@ created: "2026-08-24"
 amended: "2026-08-25"
 ---
 
-# ⚙️ MASTER PLAN v1.1.0 — Project **Kriya**
+# ⚙️ MASTER PLAN v1.2.0 — Project **Kriya**
 ## Production operations for AI systems: **MLOps · LLMOps · AIOps · AgenticOps · MCPOps**
 
 > **Kriya** (Sanskrit क्रिया) means *the action, the operation, the thing that is actually done* —
@@ -1116,20 +1116,11 @@ days/day-NNN-<day-slug>/
 │   │   └── 2.2-<slug>.md
 │   └── 03-<slug>/
 │       └── 3.1-<slug>.md
-├── papers/            # THE RESEARCH — one document per paper (§17.4.2); absent if the day cites none
-│   └── <paper-slug>.md
 └── lab/               # created by ./o scaffold NNN; the learner's own scratch code
 ```
 
 `parts/` is mandatory. **A day with no `parts/` directory is, by definition, not written** — the
 tracker reports it as pending and the phase gate cannot go green.
-
-`papers/` is present exactly when the day teaches a paper (§17.4.2), and it is a **sibling of
-`parts/`, never a section inside it**. A paper is not a subtopic of the day: it is the source the
-day's subtopics rest on, it is cited by later days as often as by this one, and numbering it into one
-day's section order would bury a curriculum-wide document inside one day's reading sequence. A paper
-document is named for its slug and nothing else — `papers/congestion-avoidance-and-control.md` —
-because that slug is what every `papers:` field in the curriculum points at.
 
 **Every folder name carries its subject.** A number alone tells a reader nothing: `days/day-143/` and
 `parts/02/` are addresses, not answers, and 237 days of them are indistinguishable in a file tree, a
@@ -1191,7 +1182,7 @@ path from "never heard of it" to "could defend this in a design review at 3am".
 
 | # | Section | The rule |
 | --- | --- | --- |
-| 1 | **frontmatter** | `day`, `part`, `title`, `ids`, `level`, `papers`, `prerequisites`, `prev`, `next`. Machine-read; the reader ignores it. `papers` is the list of paper slugs this part's idea rests on, and **`papers: []` — *I looked, there is none* — is a real and frequently correct answer** (§17.4.2). A part *about* a paper carries `kind: paper` and `paper:` as well. **No duration field of any kind** (Principle 17). |
+| 1 | **frontmatter** | `day`, `part`, `title`, `ids`, `level`, `prerequisites`, `prev`, `next`. Machine-read; the reader ignores it. **No duration field of any kind** (Principle 17), and **no `papers:`, `paper:` or `kind: paper` key** — this curriculum cites no papers (ADR-0006), and `./o depth` fails a part that carries one. |
 | 2 | **One-line answer** | The subtopic's claim in a single sentence, before anything else. A reader who reads only this line has learned something true. |
 | 3 | **The story** | A concrete scene before any abstraction: a person, a machine, a failure, a decision. Storytelling is not decoration here — it is the hook the definition hangs on. It comes **first**, in plain words, with **no jargon at all**. |
 | 4 | **The idea in plain language** | The concept itself, assuming the reader has never met it (Principle 18). Every term defined the first time it appears — *including terms from earlier days, with a link to the part that introduced them*, never an assumption of recall. No code. |
@@ -1229,90 +1220,22 @@ These come from Principles 7, 8, 12, 13 and 15 and apply on top of the ten secti
    frequently correct answer, and saying it is the lesson.
 5. **Every part that costs anything states the cost in quota units** — requests, tokens, RAM, disk,
    CI minutes (Principle 15 · Addendum 01). `0` is an answer; state it.
-6. **Never invent a citation.** A paper is a fact, exactly like a version or a flag (Principles 7
-   and 8). Every part declares `papers:` — the slugs of the papers its idea rests on, or `[]`. A
-   paper named there is one you **opened**, and it is explained in a **paper document** of its own
-   (§17.4.2), cited by title, year and identifier, never from memory and **never by author name**.
-   If the paper cannot be reached, leave a `TODO` containing the exact lookup URL — never a guess.
+#### 17.4.2 Research, and why no part cites a paper
 
-#### 17.4.2 The `papers/` folder — how research is taught here
+Plenty of what this curriculum teaches began as a published result. Exponential backoff, the
+container's resource box, the tail-latency problem and the agent loop all arrived as research before
+they arrived as a flag in a config file.
 
-Some of what this curriculum teaches is folklore that hardened into practice; some of it is a
-**published result** that a named community argued about, measured, and eventually shipped.
-Exponential backoff, the tail-latency problem, the container's resource box, technical debt in
-machine-learning systems, retrieval-augmented generation, the agent loop — every one of those
-arrived as a paper before it arrived as a flag in a config file.
+**None of that is cited here, and no day carries a `papers/` folder.** ADR-0006 removed it. The
+short version is that an operator needs the retry ladder, the jitter and the ceiling rather than the
+venue an idea was published in, and that a citation was the single easiest fact in this plan to
+fabricate.
 
-When an idea in this plan comes from research, **the paper is not a footnote. It is a part.**
-
-> **⚠️ A paper document is written on request, never by default.** Writing a day does **not** produce
-> one, and `/day-kriya N` never creates a `papers/` folder: the answer for every part of every
-> generated day is `papers: []`. The reason is Principle 8 and nothing else — a citation is the
-> easiest fact in this curriculum to fabricate, and a generator asked to go looking for research on
-> every mechanism will eventually find some that does not exist. So the research half of this
-> contract is **opt-in and deliberate**: a paper document exists because somebody chose to read that
-> paper and write it up, and the section below is the standard it is held to when they do. Day 7's
-> `papers/congestion-avoidance-and-control.md` is the worked example.
-
-**The rule, when a paper is written.** A paper is taught in a **document of its own, in the day's `papers/` folder**, written
-to the same ten-section contract as every other part (§17.4) — its own story, its own mechanism, its own failure mode, its
-own production face, its own check. A reading list at the bottom of a hub is not teaching, and a
-citation dropped inline is decoration. **If the paper is worth citing, it is worth a part; if it is
-not worth a part, do not cite it.**
-
-| Rule | The shape |
-| --- | --- |
-| **Identity** | A paper has one **slug** — kebab-case, from its title: `congestion-avoidance-and-control`. That slug is the filename, the value of its `paper:` key, and what every other part names in `papers:`. |
-| **Where it lives** | `days/day-NNN-<slug>/papers/<paper-slug>.md` — a **sibling of `parts/`**, not a section inside it (§17.2). It carries no `<section>.<subtopic>` number, because it is not a subtopic of this day: it is the source this day rests on, and the next day that rests on it links the same file. |
-| **Frontmatter** | `day`, `title`, `ids`, `level`, `kind: paper`, `paper: <slug>`, `papers: [<slug>]`, `prerequisites`, `prev`, `next`. **No `part:` key** — there is no section number to carry. `title` is the paper's real title, verbatim; `prev` is the part it grounds and `next` is the hub. |
-| **Three extra sections** | **The citation**, immediately after the one-line answer; **The demo**, immediately after *The mechanism*; and **What it did not claim**, after the walkthrough and before *When it breaks*. Everything else is the ordinary contract, in the ordinary order. |
-| **Explained once** | A paper gets exactly one document in the whole curriculum, in the `papers/` folder of the day that first needs it. A later day declares the slug in `papers:` and **links that file** (`../../day-007-.../papers/<slug>.md`) — Day 190 does not re-explain a paper Day 125 already taught, any more than it re-explains a process. |
-
-**The citation block** carries the title verbatim, the year, the venue or the arXiv identifier, a
-link to a copy that is free to read, and **the date you read it** — the same convention Principle 8
-already uses for documentation. Cite by title. **Never by author name** (§18.4): this curriculum
-names no people, and "et al." is rejected by `./o depth`.
-
-**The demo is a small end-to-end project that implements only the paper's feature.** Not the
-production version, not the rest of the system, not a library that already does it — the paper's one
-mechanism, written out in full, in the fewest files that can run: what to create, the command that
-runs it, and **the real output pasted underneath**. It is teaching code, so unlike the day's build
-brief it is complete rather than left as `TODO(me)`; the reader types it into
-`days/day-NNN-<slug>/lab/<paper-slug>/`, which is gitignored scratch space.
-
-The shape that works is **the same demo twice — without the paper's idea, then with it**. Backoff is
-not interesting until you have watched two hundred clients retry in lockstep and counted the
-collisions; a cache is not interesting until you have measured the version that re-reads everything.
-The demo prints both numbers. This is Principle 11 applied to research: the reader sees the result
-fail to happen before they see it happen, which is the difference between believing a paper and
-having run it.
-
-It stays inside the plan's constraints like everything else: no card on file, no cloud, stdlib-only
-unless the day has already pinned the dependency, and it states its cost in quota units (§17.4.1
-rule 5) — usually `0` requests, a few megabytes of RAM, and a folder that can be deleted.
-
-**What it did not claim** is the section that earns the part. Most damage done in this industry by
-a famous paper is done by the sentence it never contained: the benchmark read as a guarantee, the
-lab condition read as a default, the ablation read as a law. State the over-reading, name it, and
-say what the paper actually bounded its result to.
-
-**And the ordinary sections mean, for a paper document:**
-
-| Section | For a paper |
-| --- | --- |
-| **The story** | The world before the paper. What people were doing, and what it cost them. Still no jargon. |
-| **The idea in plain language** | The paper's core claim, from zero prior knowledge. No equations yet. |
-| **Why Kriya needs it** | The day, the file, the flag in *this* repository that exists because of this result. |
-| **The mechanism** | The actual algorithm, equation, architecture or experiment — with the numbers the paper reported. |
-| **When it breaks** | The conditions under which the result does **not** hold: the workload it was not measured on, the scale it was not run at, the replication that failed. |
-| **In production** | Which part of the paper is inside the tool you run today, which part never left the lab, and what the production version does differently — and why. |
-| **Check yourself** | Something the reader can run, compute or reproduce against the paper's own numbers — usually one edit to the demo — plus the out-loud question. |
-
-**`papers: []` is the default, and it is a real answer.** Most parts of most days rest on no paper
-at all: there is no research behind `chmod`, and inventing one to fill a field would break Principle 8
-in the most embarrassing way available. **A generated day declares `[]` everywhere**; the field is
-there so that a slug, when one does appear, is a route to a document somebody actually wrote —
-exactly like `0` in a cost budget.
+Where research genuinely changed how an operator behaves, the ordinary part says so in ordinary
+words — *"this is the retry pattern the internet settled on after congestion collapse in the
+1980s"* — with no title, no year, no identifier, no link and no author. Where it does not change how
+an operator behaves, it is not mentioned. There is no `papers:` key, no `paper:` key and no
+`kind: paper` document, and `./o depth` fails a part that carries any of the three.
 
 
 ### 17.5 What the hub (`LESSON.md`) must contain
@@ -1339,8 +1262,7 @@ walkthrough — that lives in the parts. Required, in this order:
 9. **`## §7 Traps`** — the mistakes that eat an evening, including the named trap from §5.1 if the
    day touches one.
 10. **`## §8 Verify before you build`** — the live documentation URLs actually fetched on the day of
-    writing (Principle 8), **and every paper the day teaches**: slug, title, identifier and the date
-    it was read. A day whose parts all declare `papers: []` says so in one line.
+    writing (Principle 8), each with the date it was fetched.
 11. **`## §9 Say it in an interview`** — one paragraph, spoken voice, honest, tied to what was built.
     War stories with numbers beat adjectives.
 12. **`## §10 Done when`** — pointer to `CHECKLIST.md`. Defined by understanding and green checks,
@@ -1378,17 +1300,11 @@ fully explained — *including its production face* — and not before.
 | `incident` | one stage of the incident per part: detect → triage → mitigate → resolve → learn |
 | `gate` | one acceptance criterion per part |
 | `capstone` | one component per part, in build order |
-| any day citing research | **one document per paper** in the day's `papers/` folder (§17.4.2), never squeezed into a part |
 
 There is deliberately **no target part count and no target length**. If a subject needs four parts it
 gets four; if it needs twenty-two it gets twenty-two, and the day simply spans more sittings
 (Principle 17). The only wrong answers are a part that carries two ideas and a part that stops before
 production.
-
-**A paper is never squeezed into the part that uses it.** If a day's mechanism comes from published
-research, the research is its own part — with its own story, its own numbers and its own *what it did
-not claim* (§17.4.2). Compressing a paper into a paragraph inside another part is the same edit as
-trimming a failure mode to fit, and it is forbidden for the same reason.
 
 **Every day carries at least one part whose subject is a deliberate failure.** Breaking the thing on
 purpose is not a bonus section at the bottom of a page — it is a document of its own, usually at
@@ -1415,13 +1331,12 @@ The failure modes this format exists to prevent, stated so they can be caught in
   (Principle 13). "We will add limits later" is how trap #4 happens.
 - **Trimming to fit.** Cutting an explanation because the day "is getting long" is the one edit this
   format forbids outright (Principle 17). **Split it into another part instead.**
-- **A citation instead of an explanation.** Naming a paper is not teaching it. A title and a link at
-  the bottom of a part is a reading list, and a reading list is what this format exists to replace —
-  the paper gets a part (§17.4.2) or it does not get cited. A paper cited from memory is an invented
-  fact and ranks with an invented flag (Principle 8).
-- **The claim the paper never made.** Quoting a famous result without its bounds — the workload it
-  was measured on, the scale it was run at, the thing it explicitly did not test — teaches the
-  industry's misreading rather than the research. That is what *What it did not claim* is for.
+- **A citation instead of an explanation.** Naming a paper is not teaching it, and this curriculum
+  does not cite papers at all (§17.4.2). If the origin of an idea matters, say what it changed, in
+  ordinary words, in the part that uses it.
+- **The sentence built out of clauses.** A fragment with no verb, or four ideas joined by dashes,
+  reads quickly to somebody who already knows the subject and reads as fog to somebody who does not.
+  Write whole sentences and punctuate them (§18.1).
 - **Solved reps.** `TODO(me)` stays `TODO(me)`. Depth is in the explanation, never in doing the
   learner's exercise for them.
 
@@ -1440,16 +1355,9 @@ It fails on:
   in §17.4: *Line by line* is required exactly when the part holds a code block that needs one);
 - a code block with no `Line by line:` walkthrough following it;
 - a `level` outside `foundation` · `working` · `production`;
-- a part with no `papers:` key — the question must be asked on every part, and `[]` is the answer
-  when there is no paper (§17.4.2);
-- a paper slug declared in `papers:` with no `papers/<slug>.md` teaching it, in this day or an
-  earlier one, and no link to that document from the part that declares it;
-- a `kind: paper` document inside `parts/`, or a document in `papers/` that is not `kind: paper`;
-- a `papers/` file whose name is not exactly its `paper:` slug;
-- a paper document missing its **citation** block, its identifier, the date it was read, its
-  **demo**, or its **What it did not claim** section — or carrying those three out of contract order;
-- a citation by author name (`et al.`), which this curriculum never writes (§18.4);
-- a day with a `papers/` folder whose hub §8 does not name every paper in it;
+- a part carrying a `papers:`, `paper:` or `kind: paper` key, or a day carrying a `papers/` folder,
+  all of which ADR-0006 removed from this contract and which are checked so they cannot return by
+  accident;
 - **any time estimate anywhere in a day folder** (Principle 17);
 - **a billable cloud command that is not marked 🅿️ parked** (Principle 15 · Addendum 01);
 - a hub that carries teaching, or whose §2 map does not link every part on disk;
@@ -1491,6 +1399,20 @@ review; the mechanical half is `./o depth`.
    is required and unaffected (Kubernetes, Prometheus, MLflow, Terraform, uv, ruff…), as is citing a
    specification by its revision date and a project by its official documentation URL.
 
+6. **Whole sentences, properly punctuated.** A fragment with no verb and a dash used as a
+   general-purpose joint both read as speed to somebody who already knows the subject, and as fog to
+   somebody meeting the idea for the first time. Use commas and full stops. Keep the dash for the
+   one aside per paragraph that has earned it, and let a colon introduce a list rather than a
+   thought.
+7. **The plainest word that is still exact.** Where an everyday word means the same thing as a
+   longer one, the everyday word wins: *use* over *utilise*, *starts* over *is initiated*, *find
+   out* over *ascertain*. This rule stops at accuracy. A technical term that means something
+   specific is kept and defined, because replacing it with a vague word is not simplification.
+8. **A story anyone can stand inside.** The scene in a part's *The story* has to be one the reader
+   has plausibly lived: a kitchen, a queue, a shared flat, a phone call, a school, a bus. Not a
+   trade whose vocabulary is itself the obstacle, and not one that only makes sense in one country.
+   If the scene needs explaining before it can illustrate anything, it is the wrong scene.
+
 ### 18.2 The scene format
 
 For failures and motivations, use the four-beat scene. It is what a part's *The story* and *When it
@@ -1503,47 +1425,45 @@ breaks* sections are built from:
 
 ### 18.3 Code and commands
 
-6. **Every command is given in full.** `mkdir -p`, `uv add pkg==1.2.3`, the `docker run` with all its
+9. **Every command is given in full.** `mkdir -p`, `uv add pkg==1.2.3`, the `docker run` with all its
    flags, the `kubectl` with its namespace, the check command. A reader should never have to infer
    "and now presumably I create a namespace".
-7. **Every code block is followed by `**Line by line:**`** — every non-obvious token, and *why it is
+10. **Every code block is followed by `**Line by line:**`** — every non-obvious token, and *why it is
    that line and not another*. Not a summary. **An unexplained line is a bug in the doc.** Blocks
    that are pure error output, a bare check command, or a Mermaid diagram are exempt.
-8. **Every mechanism has a matching failure with the real error text**, reproduced verbatim.
+11. **Every mechanism has a matching failure with the real error text**, reproduced verbatim.
    Paraphrasing a traceback is worse than omitting it — the reader searches for the string.
-9. **`TODO(me)` stays unsolved.** The doc teaches; it never does the reps.
-10. **Mermaid whenever the concept is spatial, sequential, or a state machine.** A request path, a
+12. **`TODO(me)` stays unsolved.** The doc teaches; it never does the reps.
+13. **Mermaid whenever the concept is spatial, sequential, or a state machine.** A request path, a
     rollout, a retry ladder, an incident timeline, an approval gate and a reconciliation loop all
     earn a diagram.
-11. **Show the output, not just the command.** An operator's skill is reading output. A `kubectl
+14. **Show the output, not just the command.** An operator's skill is reading output. A `kubectl
     describe` with no output pasted underneath has taught the reader to type, not to read.
 
 ### 18.4 Facts
 
-12. **No invented facts.** Versions, flags, field names, quotas, API signatures, spec revisions and
-    **paper citations**: looked up live and dated, or explicitly `TODO`'d **with the exact lookup
-    command**. A paper is cited by **title, year and identifier — never by author name**, and never
-    from memory: `et al.` is rejected by `./o depth`, and a paper worth citing gets a part of its own
-    (§17.4.2).
-13. **Tables for enumerable facts, prose for reasoning.** Never a table of one row.
-14. **Emoji section markers, consistent and not decorative** — 🎬 🎯 📚 🛠️ 💥 🎤 ✅ 💡 🅿️ 📌 ⚠️ 🔒 📐.
-15. **🅿️ = parked**: awareness-level, interview-ready, deliberately not built. A parked topic still
+15. **No invented facts.** Versions, flags, field names, quotas, API signatures and spec revisions:
+    looked up live and dated, or explicitly `TODO`'d **with the exact lookup command**, never from
+    memory. This curriculum cites no papers (§17.4.2), so there is no citation to get wrong.
+16. **Tables for enumerable facts, prose for reasoning.** Never a table of one row.
+17. **Emoji section markers, consistent and not decorative** — 🎬 🎯 📚 🛠️ 💥 🎤 ✅ 💡 🅿️ 📌 ⚠️ 🔒 📐.
+18. **🅿️ = parked**: awareness-level, interview-ready, deliberately not built. A parked topic still
     gets a story and a production section; what it does not get is a build step.
-16. **The interview paragraph is honest.** An answer you could actually defend, tied to what you
+19. **The interview paragraph is honest.** An answer you could actually defend, tied to what you
     built. "I have not run that at scale" is a legitimate sentence and a better one than a bluff.
 
 ### 18.5 The three things that are never written
 
-17. **Never a clock.** Not "estimated hours", not "this takes an evening", not "quick", not "a short
+20. **Never a clock.** Not "estimated hours", not "this takes an evening", not "quick", not "a short
     detour". `./o depth` fails the day on any of them (Principle 17).
-18. **Never a trim.** If the day is getting long, it gets another part (§17.7). Cutting an
+21. **Never a trim.** If the day is getting long, it gets another part (§17.7). Cutting an
     explanation to fit is the one edit this format forbids outright.
-19. **Never a command that needs a card.** A billable cloud command appears only as 🅿️ parked
+22. **Never a command that needs a card.** A billable cloud command appears only as 🅿️ parked
     reading, marked as such on or immediately above the fence. `./o depth` fails the day otherwise.
 
 ### 18.6 The ritual
 
-20. **Every day ends the same way** — the checklist, then the ledger snippets, then the commit
+23. **Every day ends the same way** — the checklist, then the ledger snippets, then the commit
     message `day NNN: <title> — closes <IDs>`. The sameness is the point: the repo is the memory,
     not the chat, and a stranger — or a different CLI agent six months from now — has to be able to
     pick up from the last row of `docs/PROGRESS.md` alone.
