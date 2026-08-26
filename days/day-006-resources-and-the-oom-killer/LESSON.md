@@ -18,8 +18,9 @@ commit: "pending"
 
 > **Yesterday (Day 5):** the filesystem, permissions, the disk that fills, and a log rotation that
 > emptied every visible file while the disk kept filling and every check stayed green.
-> **Today:** the two resources that are not stored but *consumed* — memory and processor — how they are
-> measured, how they are limited, and the moment the kernel decides one of your processes has to go.
+> **Today:** the two resources that are not stored but *consumed*, which are memory and processor: how
+> they are measured, how they are limited, and the moment the kernel decides one of your processes has to
+> go.
 > **Tomorrow (Day 7):** networking for operators — ports, sockets, DNS, TCP, and the timeout that saves
 > the system.
 
@@ -27,40 +28,41 @@ commit: "pending"
 
 ## §1 Where we are
 
-Disk is a warehouse: things sit in it, and if you look, you can count them. Memory and processor are not
-like that at all. They are a room and a clock — space that is only yours while you are standing in it, and
+Disk is a warehouse. Things sit in it, and if you look, you can count them. Memory and processor are not
+like that at all. They are a room and a clock: space that is only yours while you are standing in it, and
 time that is gone whether you used it or not.
 
 That difference is why today's numbers lie in a way yesterday's did not.
 
 Start with the plainest version. A hotel gives every guest a room number on a card. Room 400. The guest
 believes the hotel has four hundred rooms. It has forty, and the number on the card is a lookup the porter
-resolves — several cards say 400 and point at different rooms, and two of them point at the same one. Add
+resolves. Several cards say 400 and point at different rooms, and two of them point at the same one. Add
 up the numbers on the cards and you get a figure with no physical meaning whatsoever.
 
 That is virtual memory, and it is why the first number most tools show you for "how much memory is this
-using" is not a capacity number at all. There are four different correct answers to that question and
-choosing the wrong one is how people conclude a healthy service is about to fall over — or, more
+using" is not a capacity number at all. There are four different correct answers to that question, and
+choosing the wrong one is how people conclude a healthy service is about to fall over, or, more
 expensively, set a limit ten times too large on every replica of every service, forever.
 
 The processor has the mirror-image problem. A post office with one clerk shows "100% utilisation" whether
-one person is waiting or forty. The metric saturates exactly where the interesting behaviour starts, so a
-dashboard that plots it shows a flat line across a tenfold change in how long everybody waited.
+one person is waiting or forty. The metric reaches its ceiling exactly where the interesting behaviour
+starts, so a dashboard that plots it shows a flat line across a tenfold change in how long everybody
+waited.
 
 Then the limits, which are where it gets sharp. A memory limit and a CPU limit sound like two settings of
-the same kind and they are not. **Exceeding a CPU limit slows you down; exceeding a memory limit kills
-you** — with a signal that cannot be caught, so nothing is flushed, no shutdown runs, and the last thing
-your service ever logged was a successful request. That asymmetry comes from one physical fact: processor
-time can be shared and a page of memory cannot.
+the same kind and they are not. **Exceeding a CPU limit slows you down, and exceeding a memory limit
+kills you**, with a signal that cannot be caught, so nothing is flushed, no shutdown runs, and the last
+thing your service ever logged was a successful request. That asymmetry comes from one physical fact:
+processor time can be shared and a page of memory cannot.
 
 The day ends where the title says. You will drive `pulse` past a memory limit with a request in flight and
 watch the client get an empty reply with no status code, the health check return 200 a moment before, the
-error rate stay at zero, and the latency graph show nothing — because a request that is never answered has
+error rate stay at zero, and the latency graph show nothing, because a request that is never answered has
 no duration. **Every signal you own will be blind.** The only account of what happened is written by the
 kernel, in a file your service cannot reach and does not know exists.
 
-And then the signal that would have warned you, which the kernel added precisely because everything else on
-this day answers the wrong question.
+And then comes the signal that would have warned you, which the kernel added precisely because everything
+else on this day answers the wrong question.
 
 ---
 

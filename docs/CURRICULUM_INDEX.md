@@ -20,11 +20,11 @@ remember. Every ID appears exactly once; a duplicate or a missing ID is a plan b
 | `FND-07` | [6](../days/day-006-resources-and-the-oom-killer/LESSON.md) | Resources — CPU, memory, the OOM killer, and why your process was simply `Killed` |
 | `FND-08` | [7](../days/day-007-networking-for-operators/LESSON.md) | Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system |
 | `FND-09` | [7](../days/day-007-networking-for-operators/LESSON.md) | Networking for operators — ports, sockets, DNS, TCP, and the timeout that saves the system |
-| `FND-10` | [8](../days/day-008-http-and-tls/LESSON.md) | HTTP and TLS in production — status codes that mean something, keep-alive, and the cert… |
-| `FND-11` | [9](../days/day-009-configuration-and-secrets/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
-| `FND-12` | [9](../days/day-009-configuration-and-secrets/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
-| `FND-13` | [10](../days/day-010-environments-and-promotion/LESSON.md) | Environments and promotion — what the word "production" actually promises |
-| `FND-14` | [11](../days/day-011-version-control-for-operators/LESSON.md) | Version control for operators — the history you will read at 2am, and the commit that e… |
+| `FND-10` | [8](../days/day-008/LESSON.md) | HTTP and TLS in production — status codes that mean something, keep-alive, and the cert… |
+| `FND-11` | [9](../days/day-009/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
+| `FND-12` | [9](../days/day-009/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
+| `FND-13` | [10](../days/day-010/LESSON.md) | Environments and promotion — what the word "production" actually promises |
+| `FND-14` | [11](../days/day-011/LESSON.md) | Version control for operators — the history you will read at 2am, and the commit that e… |
 | `FND-15` | [12](../days/day-012/LESSON.md) | Branching, review and the change that can be reverted |
 | `FND-16` | [20](../days/day-020/LESSON.md) | Measuring change — the four delivery metrics, computed from your own repository |
 | `FND-17` | [229](../days/day-229/LESSON.md) | The production readiness review — the checklist you now actually understand |
@@ -281,7 +281,7 @@ remember. Every ID appears exactly once; a duplicate or a missing ID is a plan b
 
 | ID | Day | Day title |
 | --- | --- | --- |
-| `SEC-01` | [9](../days/day-009-configuration-and-secrets/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
+| `SEC-01` | [9](../days/day-009/LESSON.md) | Configuration and secrets — the twelve-factor service, `.env`, and code that refuses to… |
 | `SEC-02` | [15](../days/day-015/LESSON.md) | Build artifacts and reproducibility — the lockfile, the hash, and the first SBOM |
 | `SEC-03` | [17](../days/day-017/LESSON.md) | Secrets in CI — the token that must never be printed, and the scan that proves it was not |
 | `SEC-04` | [28](../days/day-028/LESSON.md) | Container security — non-root, read-only root filesystem, dropped capabilities |
